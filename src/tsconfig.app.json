@@ -5,6 +5,12 @@
     "module": "es2015",
     "types": [],
     "paths": {
+      "@internal": [
+        "app/library"
+      ],
+      "@internal/*": [
+        "app/library/*"
+      ],
       "@shared": [
         "app/shared"
       ],

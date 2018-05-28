@@ -1,11 +1,21 @@
-import { Injectable, Injector, Inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NgRedux } from '@angular-redux/store';
 import { HttpClient } from '@angular/common/http';
-import { zip } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { MenuService, SettingsService, TitleService, ALAIN_I18N_TOKEN } from '@delon/theme';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { Inject, Injectable, Injector } from '@angular/core';
+import { DataFlushService } from '@core/store/providers/dataFlush.service';
+import { RootEpics } from '@core/store/store.epic';
+import { IAppState, INIT_APP_STATE } from '@core/store/store.model';
+import { rootReducer } from '@core/store/store.reducer';
+import { deepExtend } from '@core/utils/helpers';
 import { ACLService } from '@delon/acl';
+import { DA_SERVICE_TOKEN, DelonAuthConfig, ITokenService } from '@delon/auth';
+import { MenuService, SettingsService, TitleService } from '@delon/theme';
+import { Storage } from '@ionic/storage';
+import { createLogger } from 'redux-logger';
+import { createEpicMiddleware } from 'redux-observable';
+import { stateTransformer } from 'redux-seamless-immutable';
+import { from, zip } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import * as Immutable from 'seamless-immutable';
 
 /**
  * 用于应用启动时
@@ -14,23 +24,40 @@ import { ACLService } from '@delon/acl';
 @Injectable()
 export class StartupService {
   constructor(
+    private authConfig: DelonAuthConfig,
     private menuService: MenuService,
     private settingService: SettingsService,
     private aclService: ACLService,
     private titleService: TitleService,
+    private store: NgRedux<IAppState>,
+    private rootEpics: RootEpics,
+    private dataFlushService: DataFlushService,
+    private storage: Storage,
     @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
     private httpClient: HttpClient,
     private injector: Injector
   ) { }
 
   private viaHttp(resolve: any, reject: any) {
+    from(this.dataFlushService.restoreState()).pipe(
+      map((restoredState) => {
+        this.store.configureStore(
+          rootReducer,
+          <any>Immutable(deepExtend(INIT_APP_STATE, restoredState)),
+          [createLogger({ stateTransformer: stateTransformer }), createEpicMiddleware(this.rootEpics.createEpics())]);
+      }),
+      map((_) => from(this.storage.get(this.authConfig.store_key)),
+        map((token) => this.tokenService.set(token))
+      );
+
+
     zip(
       this.httpClient.get('assets/tmp/app-data.json')
     ).pipe(
       // 接收其他拦截器后产生的异常消息
       catchError(([appData]) => {
-          resolve(null);
-          return [appData];
+        resolve(null);
+        return [appData];
       })
     ).subscribe(([appData]) => {
 
@@ -47,10 +74,10 @@ export class StartupService {
       // 设置页面标题的后缀
       this.titleService.suffix = res.app.name;
     },
-    () => { },
-    () => {
-      resolve(null);
-    });
+      () => { },
+      () => {
+        resolve(null);
+      });
   }
 
   private viaMock(resolve: any, reject: any) {
