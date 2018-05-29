@@ -1,17 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-// delon
-import { AlainThemeModule } from '@delon/theme';
 import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
-
-// region: third libs
+import { AlainThemeModule } from '@delon/theme';
+import { AutofocusDirective } from '@shared/directives/autofocus.directive';
+import { DragulaDirective } from '@shared/directives/dragula.directive';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
 
+// delon
+// region: third libs
 const THIRDMODULES = [
   NgZorroAntdModule,
   CountdownModule
@@ -20,7 +21,7 @@ const THIRDMODULES = [
 
 // region: your componets & directives
 const COMPONENTS = [];
-const DIRECTIVES = [];
+const DIRECTIVES = [AutofocusDirective, DragulaDirective];
 // endregion
 
 @NgModule({
