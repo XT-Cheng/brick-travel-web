@@ -20,28 +20,12 @@ import { RootEpics } from '@core/store/store.epic';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
+import { TokenStorage } from '@core/auth/providers/tokenStorage';
+import { TokenService } from '@core/auth/providers/tokenService';
+import { AuthService } from '@core/auth/providers/authService';
+import { JWTInterceptor } from '@delon/auth';
 
 const PROVIDERS = [
-  ErrorService,
-  RootEpics,
-  EntityEpics,
-  CityService,
-  ViewPointService,
-  UserService,
-  FilterCategoryService,
-  MasterDataService,
-  TravelAgendaService,
-  TravelAgendaUIService,
-  ViewPointCategoryService,
-  TransportationCategoryService,
-  CityUIService,
-  ViewPointUIService,
-  DataFlushService,
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: ErrorInterceptorService,
-    multi: true
-  }
 ];
 
 @NgModule({

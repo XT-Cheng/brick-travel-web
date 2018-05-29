@@ -1,11 +1,11 @@
 import { FluxStandardAction } from 'flux-standard-action';
 
-import { FileUploader } from '../../fileUpload/providers/file-uploader';
 import { IBiz } from '../bizModel/biz.model';
 import { IError } from '../error/error.model';
 import { IActionMetaInfo, IActionPayload } from '../store.action';
 import { STORE_UI_KEY } from '../ui/ui.model';
 import { EntityTypeEnum, IEntities, STORE_ENTITIES_KEY } from './entity.model';
+import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 
 export enum EntityActionPhaseEnum {
     TRIGGER = 'TRIGGER',

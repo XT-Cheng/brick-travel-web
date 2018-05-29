@@ -22,7 +22,6 @@ import {
 import * as Immutable from 'seamless-immutable';
 import { isArray } from 'util';
 
-import { FileUploader } from '../../fileUpload/providers/file-uploader';
 import { WEBAPI_HOST } from '../../utils/constants';
 import { IBiz } from '../bizModel/biz.model';
 import { dirtyAddAction, dirtyRemoveAction, DirtyTypeEnum } from '../dirty/dirty.action';
@@ -43,6 +42,7 @@ import { FilterEx } from '../utils/filterEx';
 import { ErrorService } from './error.service';
 import { FetchService } from './fetch.service';
 import { UIService } from './ui.service';
+import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 
 export abstract class EntityService<T extends IEntity, U extends IBiz> extends FetchService {
     //#region Constructor

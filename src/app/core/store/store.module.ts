@@ -10,7 +10,6 @@ import * as Immutable from 'seamless-immutable';
 import { TokenService } from '../auth/providers/tokenService';
 import { TokenStorage } from '../auth/providers/tokenStorage';
 import { deepExtend } from '../utils/helpers';
-import { throwIfAlreadyLoaded } from '../utils/module-import-guard';
 import { EntityEpics } from './entity/entity.epic';
 import { CityService } from './providers/city.service';
 import { CityUIService } from './providers/city.ui.service';
@@ -29,6 +28,8 @@ import { ViewPointCategoryService } from './providers/viewPointCategory.service'
 import { RootEpics } from './store.epic';
 import { IAppState, INIT_APP_STATE } from './store.model';
 import { rootReducer } from './store.reducer';
+import { throwIfAlreadyLoaded } from '@core/module-import-guard';
+import { JWTInterceptor } from '@delon/auth';
 
 const PROVIDERS = [
     ErrorService,
@@ -50,6 +51,11 @@ const PROVIDERS = [
         provide: HTTP_INTERCEPTORS,
         useClass: ErrorInterceptorService,
         multi: true
+    },
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: JWTInterceptor,
+        multi: true
     }
 ];
 
@@ -63,19 +69,6 @@ export class StoreModule {
         private _storage: Storage,
         private _store: NgRedux<IAppState>) {
         throwIfAlreadyLoaded(parentModule, 'StoreModule');
-
-        this._dataFlushService.restoreState().then((restoredState) => {
-            this._store.configureStore(
-                rootReducer,
-                <any>Immutable(deepExtend(INIT_APP_STATE, restoredState)),
-                [createLogger({ stateTransformer: stateTransformer }), createEpicMiddleware(this._rootEpics.createEpics())]);
-        }).then(() =>
-            this._storage.get(TokenStorage.TOKEN_KEY)
-        ).then((value) =>
-            this._tokenService.setRaw(value)
-        ).then(() => {
-            this._masterDataService.fetch();
-        });
     }
 
     static forRoot(): ModuleWithProviders {

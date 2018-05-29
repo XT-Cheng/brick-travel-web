@@ -16,6 +16,10 @@ import { DelonModule } from './delon.module';
 import { LayoutModule } from './layout/layout.module';
 import { RoutesModule } from './routes/routes.module';
 import { SharedModule } from './shared/shared.module';
+import { FileUploadModule } from '@shared/fileUpload/fileUpload.module';
+import { WEBAPI_HOST } from '@core/utils/constants';
+import { StoreModule } from '@core/store/store.module';
+import { AuthModule } from '@core/auth/auth.module';
 
 // angular i18n
 registerLocaleData(localeZhHans);
@@ -41,6 +45,9 @@ export function StartupServiceFactory(startupService: StartupService): Function 
     // JSON-Schema form
     JsonSchemaModule,
     // Brick Travel Modules
+    StoreModule.forRoot(),
+    AuthModule.forRoot(),
+    FileUploadModule.forRoot({ url: `${WEBAPI_HOST}/fileUpload` }),
     IonicStorageModule.forRoot()
   ],
   providers: [

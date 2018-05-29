@@ -5,7 +5,7 @@ import { denormalize, normalize } from 'normalizr';
 import { Observable } from 'rxjs/Observable';
 import * as Immutable from 'seamless-immutable';
 
-import { FileUploader } from '../../fileUpload/providers/file-uploader';
+
 import {
     IDailyTripBiz,
     ITravelAgendaBiz,
@@ -24,6 +24,7 @@ import { EntityService } from './entity.service';
 import { ErrorService } from './error.service';
 import { TransportationCategoryService } from './transportationCategory.service';
 import { TravelAgendaUIService } from './travelAgenda.ui.service';
+import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 
 @Injectable()
 export class TravelAgendaService extends EntityService<ITravelAgenda, ITravelAgendaBiz> {
