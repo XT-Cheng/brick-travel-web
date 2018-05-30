@@ -98,15 +98,16 @@ export class UserLoginComponent implements OnDestroy {
       this.captcha.updateValueAndValidity();
       if (this.mobile.invalid || this.captcha.invalid) return;
     }
-    // mock http
+
     this.loading = true;
 
-    this.service.authenticate({ userName: this.userName.value, password: this.password.value }).subscribe((result: AuthResult) => {
+    this.service.authenticate({ username: this.userName.value, password: this.password.value }).subscribe((result: AuthResult) => {
       // if (result.isSuccess()) {
       //   this.messages = result.getMessages();
       // } else {
       //   this.errors = result.getErrors();
       // }
+      this.loading = false;
 
       if (result.isFailure()) {
         this.error = result.getErrors()[0];
