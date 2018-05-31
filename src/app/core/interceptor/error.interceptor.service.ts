@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { _throw } from 'rxjs/observable/throw';
 import { catchError } from 'rxjs/operators';
 
-import { IError } from '../error/error.model';
+import { IError } from '@core/store/error/error.model';
+import { throwError } from 'rxjs';
 
 @Injectable()
 export class ErrorInterceptorService implements HttpInterceptor {
@@ -38,7 +39,7 @@ export class ErrorInterceptorService implements HttpInterceptor {
                     };
                 }
                 errResponse.actionError = err;
-                return _throw(errResponse);
+                return throwError(errResponse);
             })
         );
     }

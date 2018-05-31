@@ -108,7 +108,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         // 若一切都正常，则后续操作
         return of(event);
       }),
-      catchError((err: HttpErrorResponse) => this.handleData(err)),
+      // catchError((err: HttpErrorResponse) => this.handleData(err)),
     );
   }
 }

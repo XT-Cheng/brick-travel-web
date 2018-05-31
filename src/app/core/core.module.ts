@@ -5,7 +5,7 @@ import { EntityEpics } from '@core/store/entity/entity.epic';
 import { CityService } from '@core/store/providers/city.service';
 import { CityUIService } from '@core/store/providers/city.ui.service';
 import { DataFlushService } from '@core/store/providers/dataFlush.service';
-import { ErrorInterceptorService } from '@core/store/providers/error.interceptor.service';
+import { ErrorInterceptorService } from '@core/interceptor/error.interceptor.service';
 import { ErrorService } from '@core/store/providers/error.service';
 import { FilterCategoryService } from '@core/store/providers/filterCategory.service';
 import { MasterDataService } from '@core/store/providers/masterData.service';
@@ -26,6 +26,16 @@ import { AuthService } from '@core/auth/providers/authService';
 import { JWTInterceptor } from '@delon/auth';
 
 const PROVIDERS = [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorInterceptorService,
+    multi: true
+},
+// {
+//     provide: HTTP_INTERCEPTORS,
+//     useClass: JWTInterceptor,
+//     multi: true
+// }
 ];
 
 @NgModule({

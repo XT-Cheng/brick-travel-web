@@ -14,7 +14,7 @@ import { EntityEpics } from './entity/entity.epic';
 import { CityService } from './providers/city.service';
 import { CityUIService } from './providers/city.ui.service';
 import { DataFlushService } from './providers/dataFlush.service';
-import { ErrorInterceptorService } from './providers/error.interceptor.service';
+import { ErrorInterceptorService } from '@core/interceptor/error.interceptor.service';
 import { ErrorService } from './providers/error.service';
 import { FilterCategoryService } from './providers/filterCategory.service';
 import { MasterDataService } from './providers/masterData.service';
@@ -47,16 +47,6 @@ const PROVIDERS = [
     CityUIService,
     ViewPointUIService,
     DataFlushService,
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: ErrorInterceptorService,
-        multi: true
-    },
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: JWTInterceptor,
-        multi: true
-    }
 ];
 
 @NgModule({
