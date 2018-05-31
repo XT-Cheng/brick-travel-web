@@ -1,23 +1,21 @@
 import { NgRedux } from '@angular-redux/store';
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
+import { TokenService } from '@core/auth/providers/tokenService';
+import { TokenStorage } from '@core/auth/providers/tokenStorage';
+import { CityService } from '@core/store/providers/city.service';
 import { DataFlushService } from '@core/store/providers/dataFlush.service';
+import { MasterDataService } from '@core/store/providers/masterData.service';
 import { RootEpics } from '@core/store/store.epic';
 import { IAppState, INIT_APP_STATE } from '@core/store/store.model';
 import { rootReducer } from '@core/store/store.reducer';
 import { deepExtend } from '@core/utils/helpers';
-import { ACLService } from '@delon/acl';
-import { DA_SERVICE_TOKEN, DelonAuthConfig, ITokenService } from '@delon/auth';
-import { MenuService, SettingsService, TitleService } from '@delon/theme';
+import { Menu, MenuService, SettingsService } from '@delon/theme';
 import { Storage } from '@ionic/storage';
 import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 import { stateTransformer } from 'redux-seamless-immutable';
-import { from, zip } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
 import * as Immutable from 'seamless-immutable';
-import { TokenStorage } from '@core/auth/providers/tokenStorage';
-import { TokenService } from '@core/auth/providers/tokenService';
 
 /**
  * 用于应用启动时
@@ -25,17 +23,63 @@ import { TokenService } from '@core/auth/providers/tokenService';
  */
 @Injectable()
 export class StartupService {
+  private testMenuItem = {
+    text: 'Test',
+    icon: 'icon-speedometer',
+    link: '/test'
+  };
+
+  private cityMenuItem = {
+    text: 'City',
+    icon: 'icon-speedometer',
+    link: 'city'
+  };
+
+  private viewPointMenuItem = {
+    text: 'View Point',
+    icon: 'icon-speedometer',
+    children: []
+  };
+
+  private travelAgendaMenuItem = {
+    text: 'Travel Agenda',
+    icon: 'icon-speedometer',
+    link: 'travelAgenda'
+  };
+
+  private mainNavMenuItem = {
+    text: 'Main',
+    group: true,
+    icon: 'icon-speedometer',
+    children: [
+      this.testMenuItem, this.cityMenuItem, this.viewPointMenuItem
+    ]
+  };
+
   constructor(
     private _menuService: MenuService,
     private _settingService: SettingsService,
     private _store: NgRedux<IAppState>,
+    private _cityService: CityService,
     private _rootEpics: RootEpics,
     private _dataFlushService: DataFlushService,
+    private _masterService: MasterDataService,
     private _storage: Storage,
     private _tokenService: TokenService,
     private _httpClient: HttpClient,
     private _injector: Injector
-  ) { }
+  ) {
+    this._cityService.all$.subscribe(cities => {
+      cities.forEach((city) => {
+        this.viewPointMenuItem.children.push({
+          text: city.name,
+          link: `viewPoint/${city.id}`,
+          icon: 'icon-speedometer'
+        });
+      });
+      this._menuService.add([this.mainNavMenuItem]);
+    });
+  }
 
   private viaHttp(resolve: any, reject: any) {
     this._dataFlushService.restoreState().then((restoredState) => {
@@ -47,9 +91,15 @@ export class StartupService {
       this._storage.get(TokenStorage.TOKEN_KEY)
     ).then((value) =>
       this._tokenService.setRaw(value)
+    ).then((_) =>
+      this._masterService.fetch()
     ).then((_) => {
       resolve(null);
     });
+  }
+
+  private prepareMenu(): Menu[] {
+    return [this.testMenuItem, this.cityMenuItem, this.viewPointMenuItem, this.travelAgendaMenuItem];
   }
 
   //   zip(
