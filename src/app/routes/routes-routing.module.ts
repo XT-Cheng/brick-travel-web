@@ -25,7 +25,8 @@ const routes: Routes = [
     component: LayoutDefaultComponent,
     canActivate: [MainRoutingGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'city', pathMatch: 'full' },
+      { path: 'city', loadChildren: 'app/@features/@city/city.module#CityModule' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }

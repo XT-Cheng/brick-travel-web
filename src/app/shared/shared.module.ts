@@ -6,6 +6,9 @@ import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 import { AlainThemeModule } from '@delon/theme';
+import { AMapComponent } from '@shared/components/a-map/a-map.component';
+import { InformationWindowComponent } from '@shared/components/a-map/information-window/information-window.component';
+import { ModalComponent } from '@shared/components/modal/modal.component';
 import { AutofocusDirective } from '@shared/directives/autofocus.directive';
 import { DragulaDirective } from '@shared/directives/dragula.directive';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -20,8 +23,9 @@ const THIRDMODULES = [
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [];
+const COMPONENTS = [ModalComponent, AMapComponent];
 const DIRECTIVES = [AutofocusDirective, DragulaDirective];
+const ENTRIES = [InformationWindowComponent]
 // endregion
 
 @NgModule({
@@ -41,6 +45,9 @@ const DIRECTIVES = [AutofocusDirective, DragulaDirective];
     // your components
     ...COMPONENTS,
     ...DIRECTIVES
+  ],
+  entryComponents: [
+    ...ENTRIES
   ],
   exports: [
     CommonModule,
