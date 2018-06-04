@@ -26,7 +26,7 @@ const routes: Routes = [
     canActivate: [MainRoutingGuard],
     children: [
       { path: '', redirectTo: 'city', pathMatch: 'full' },
-      { path: 'city', loadChildren: 'app/@features/@city/city.module#CityModule' },
+      { path: 'city', loadChildren: 'app/routes/features/city/city.module#CityModule' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }

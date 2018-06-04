@@ -13,8 +13,7 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { getValueInRange, toString } from '../../../../@core/utils/helpers';
+import { getValueInRange, toString } from '@core/utils/helpers';
 
 enum Key {
   End = 35,

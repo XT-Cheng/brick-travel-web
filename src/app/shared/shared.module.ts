@@ -13,6 +13,8 @@ import { AutofocusDirective } from '@shared/directives/autofocus.directive';
 import { DragulaDirective } from '@shared/directives/dragula.directive';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
+import { RateComponent } from '@shared/components/a-map/rate/rate.component';
+import { ViewPointMarkerComponent } from '@shared/components/a-map/viewpoint-marker/viewpoint-marker.component';
 
 // delon
 // region: third libs
@@ -23,9 +25,9 @@ const THIRDMODULES = [
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [ModalComponent, AMapComponent];
+const COMPONENTS = [ModalComponent, InformationWindowComponent, AMapComponent, RateComponent, ViewPointMarkerComponent];
 const DIRECTIVES = [AutofocusDirective, DragulaDirective];
-const ENTRIES = [InformationWindowComponent]
+const ENTRIES = [InformationWindowComponent, ViewPointMarkerComponent];
 // endregion
 
 @NgModule({

@@ -30,6 +30,7 @@ import { IAppState, INIT_APP_STATE } from './store.model';
 import { rootReducer } from './store.reducer';
 import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 import { JWTInterceptor } from '@delon/auth';
+import { SearchService } from '@core/store/providers/search.service';
 
 const PROVIDERS = [
     ErrorService,
@@ -47,6 +48,7 @@ const PROVIDERS = [
     CityUIService,
     ViewPointUIService,
     DataFlushService,
+    SearchService
 ];
 
 @NgModule({

@@ -5,11 +5,11 @@ import { ICity } from '@core/store/entity/model/city.model';
 import { CityService } from '@core/store/providers/city.service';
 import { CityUIService } from '@core/store/providers/city.ui.service';
 import { ErrorService } from '@core/store/providers/error.service';
-import { SearchService } from '@shared/providers/search.service';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 
 import { EntityListComponent } from '../../../entity.list.component';
 import { CityFormComponent } from '../form/city.form.component';
+import { SearchService } from '@core/store/providers/search.service';
 
 @Component({
   selector: 'bt-city-list',

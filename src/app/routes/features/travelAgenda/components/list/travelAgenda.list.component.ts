@@ -6,10 +6,10 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { TravelAgendaService } from '@core/store/providers/travelAgenda.service';
 import { TravelAgendaUIService } from '@core/store/providers/travelAgenda.ui.service';
 import { ViewPointService } from '@core/store/providers/viewPoint.service';
-import { SearchService } from '@shared/providers/search.service';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 
 import { EntityListComponent } from '../../../entity.list.component';
+import { SearchService } from '@core/store/providers/search.service';
 
 @Component({
   selector: 'bt-ta-list',

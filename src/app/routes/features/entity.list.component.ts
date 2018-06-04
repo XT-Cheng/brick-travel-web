@@ -6,12 +6,12 @@ import { EntityService } from '@core/store/providers/entity.service';
 import { ErrorService } from '@core/store/providers/error.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
-import { SearchService } from '@shared/providers/search.service';
 import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
 import { ComponentType, EntityFormMode } from './entity.form.component';
+import { SearchService } from '@core/store/providers/search.service';
 
 export abstract class EntityListComponent<T extends IEntity, U extends IBiz> implements ComponentType,
     OnInit, OnDestroy {
