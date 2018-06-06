@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FileUploadModule } from '@shared/fileUpload/fileUpload.module';
+import { SharedModule } from '@shared/shared.module';
 
 import { ViewPointFormComponent } from './components/form/viewPoint.form.component';
 import { ViewPointListComponent } from './components/list/viewPoint.list.component';
@@ -15,7 +16,8 @@ const VIEWPOINT_COMPONENTS = [
 @NgModule({
   imports: [
     FileUploadModule,
-    ViewPointRoutingModule
+    ViewPointRoutingModule,
+    SharedModule
   ],
   declarations: [
     ...VIEWPOINT_COMPONENTS

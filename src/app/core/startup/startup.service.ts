@@ -32,7 +32,7 @@ export class StartupService {
   private cityMenuItem = {
     text: 'City',
     icon: 'icon-speedometer',
-    link: 'city'
+    link: '/city'
   };
 
   private viewPointMenuItem = {
@@ -44,7 +44,7 @@ export class StartupService {
   private travelAgendaMenuItem = {
     text: 'Travel Agenda',
     icon: 'icon-speedometer',
-    link: 'travelAgenda'
+    link: '/travelAgenda'
   };
 
   private mainNavMenuItem = {
@@ -73,7 +73,7 @@ export class StartupService {
       cities.forEach((city) => {
         this.viewPointMenuItem.children.push({
           text: city.name,
-          link: `viewPoint/${city.id}`,
+          link: `/viewPoint/${city.id}`,
           icon: 'icon-speedometer'
         });
       });

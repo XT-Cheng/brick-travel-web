@@ -1,5 +1,5 @@
-<div class="row">
-  <!-- <nb-card *ngFor='let city of (_cityService.filteredAndSearched$ | async)' class='city-card'>
+<!-- <div class="row">
+  <nb-card *ngFor='let city of (_cityService.filteredAndSearched$ | async)' class='city-card'>
     <nb-card-body>
       <img [src]="city.thumbnail" />
       <div class="card-title">{{city.name}}</div>
@@ -10,5 +10,15 @@
         <nb-action icon='nb-close' (click)='delete(city)'></nb-action>
       </nb-actions>
     </nb-card-footer>
-  </nb-card> -->
+  </nb-card>
+</div> -->
+
+<div nz-row>
+  <nz-card nz-col [nzSpan]="6" *ngFor='let city of (_cityService.filteredAndSearched$ | async)' class='city-card' [nzCover]='coverTemplate'>
+    <nz-card-meta [nzTitle]="city.name" nzDescription="This is the description"></nz-card-meta>
+    <ng-template #coverTemplate>
+      <img [src]="city.thumbnail" />
+    </ng-template>
+  </nz-card>
+  <!-- </div> -->
 </div>
