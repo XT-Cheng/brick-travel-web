@@ -5,15 +5,14 @@ import { environment } from '@env/environment';
 import { LayoutDefaultComponent } from '../layout/default/default.component';
 import { LayoutPassportComponent } from '../layout/passport/passport.component';
 import { CallbackComponent } from './callback/callback.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { Exception403Component } from './exception/403.component';
 import { Exception404Component } from './exception/404.component';
 import { Exception500Component } from './exception/500.component';
-import { MainRoutingGuard } from './main-routing-guard';
 import { UserLockComponent } from './passport/lock/lock.component';
 import { UserLoginComponent } from './passport/login/login.component';
 import { UserRegisterResultComponent } from './passport/register-result/register-result.component';
 import { UserRegisterComponent } from './passport/register/register.component';
+import { RoutingGuard } from './routing-guard';
 
 // layout
 // dashboard pages
@@ -23,11 +22,10 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
-    canActivate: [MainRoutingGuard],
+    canActivate: [RoutingGuard],
     children: [
       { path: '', redirectTo: 'city', pathMatch: 'full' },
       { path: 'city', loadChildren: 'app/routes/features/city/city.module#CityModule' },
-      { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' } },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
     ]
@@ -55,12 +53,12 @@ const routes: Routes = [
   { path: '403', component: Exception403Component },
   { path: '404', component: Exception404Component },
   { path: '500', component: Exception500Component },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'city' }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: environment.useHash })],
   exports: [RouterModule],
-  providers: [MainRoutingGuard]
+  providers: [RoutingGuard]
 })
 export class RouteRoutingModule { }

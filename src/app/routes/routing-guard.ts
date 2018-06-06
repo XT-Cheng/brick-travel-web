@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import { filter, map, take } from 'rxjs/operators';
 
 @Injectable()
-export class MainRoutingGuard implements CanActivate, CanActivateChild {
+export class RoutingGuard implements CanActivate, CanActivateChild {
     constructor(private _authService: AuthService, private _router: Router, @Inject(DOCUMENT) private _document) {
         this._router.events.pipe(
             filter((event) => event instanceof NavigationEnd)
