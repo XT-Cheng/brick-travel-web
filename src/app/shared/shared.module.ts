@@ -27,7 +27,7 @@ const THIRDMODULES = [
 // region: your componets & directives
 const COMPONENTS = [ModalComponent, InformationWindowComponent, AMapComponent, RateComponent, ViewPointMarkerComponent];
 const DIRECTIVES = [AutofocusDirective, DragulaDirective];
-const ENTRIES = [InformationWindowComponent, ViewPointMarkerComponent];
+const ENTRIES = [InformationWindowComponent, ViewPointMarkerComponent, ModalComponent];
 // endregion
 
 @NgModule({

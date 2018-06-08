@@ -4,6 +4,15 @@
   <layout-sidebar class="aside"></layout-sidebar>
   <section class="content">
     <reuse-tab></reuse-tab>
+    <quick-menu icon='anticon anticon-left-circle-o'>
+        <nz-list [nzBordered]="false" [nzSplit]="false">
+            <nz-list-item><a href="#">Link1</a></nz-list-item>
+            <nz-list-item><a href="#">Link2</a></nz-list-item>
+            <nz-list-item><a href="#">Link3</a></nz-list-item>
+            <nz-list-item><a href="#">Link4</a></nz-list-item>
+            <nz-list-item><a href="#">Link5</a></nz-list-item>
+        </nz-list>
+    </quick-menu>
     <router-outlet></router-outlet>
   </section>
 </div>
