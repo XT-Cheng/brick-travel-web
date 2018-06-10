@@ -1,11 +1,12 @@
 <div nz-row>
-  <nz-card nz-col [nzActions]="[actionEdit,actionDelete]" [nzSpan]="6" *ngFor='let city of (_cityService.filteredAndSearched$ | async)' class='city-card' [nzCover]='coverTemplate'>
+  <nz-card nz-col [nzActions]="[actionEdit,actionDelete]" [nzSpan]="6" *ngFor='let city of (_cityService.filteredAndSearched$ | async)'
+    class='city-card' [nzCover]='coverTemplate'>
     <nz-card-meta [nzTitle]="city.name"></nz-card-meta>
     <ng-template #coverTemplate>
       <img [src]="city.thumbnail" />
     </ng-template>
     <ng-template #actionEdit>
-      <i class="anticon anticon-edit"></i>
+      <i class="anticon anticon-edit" (click)='edit(city)'></i>
     </ng-template>
     <ng-template #actionDelete>
       <i class="anticon anticon-delete" (click)='delete(city)'></i>
