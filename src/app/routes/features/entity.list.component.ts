@@ -4,6 +4,7 @@ import { IBiz } from '@core/store/bizModel/biz.model';
 import { IEntity } from '@core/store/entity/entity.model';
 import { EntityService } from '@core/store/providers/entity.service';
 import { ErrorService } from '@core/store/providers/error.service';
+import { SearchService } from '@core/store/providers/search.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { NzModalService } from 'ng-zorro-antd';
@@ -11,7 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
 import { ComponentType, EntityFormMode } from './entity.form.component';
-import { SearchService } from '@core/store/providers/search.service';
 
 export abstract class EntityListComponent<T extends IEntity, U extends IBiz> implements ComponentType,
     OnInit, OnDestroy {
@@ -56,12 +56,11 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     editEntity(entity: U, name: string) {
         this._modalService.create({
-            nzTitle: 'Modal Title',
+            nzTitle: `Edit ${this.entityDescription} ${name}`,
             nzContent: this.componentType,
             nzComponentParams: {
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
-                title: `Edit ${this.entityDescription} ${name}`
             },
             nzFooter: null
         });

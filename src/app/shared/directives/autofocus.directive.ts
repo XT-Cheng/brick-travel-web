@@ -10,7 +10,10 @@ export class AutofocusDirective implements AfterViewInit {
 
     ngAfterViewInit() {
         if (this._autofocus || typeof this._autofocus === 'undefined') {
-            this.el.nativeElement.focus();
+            // In case Dynamic Component
+            setTimeout(() => {
+                this.el.nativeElement.focus();
+            });
         }
     }
 

@@ -6,7 +6,7 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { WEBAPI_HOST } from '@core/utils/constants';
 import { FileItem } from '@shared/fileUpload/providers/file-item';
 import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
-import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
+import { NzMessageService, NzModalRef, UploadFile } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
 
@@ -46,6 +46,29 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   //#endregion
 
   //#region Public method
+  uploadUrl = `${WEBAPI_HOST}/fileUpload`;
+  loading = false;
+  avatarUrl: string;
+
+  private getBase64(img: File, callback: (img: {}) => void): void {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+  }
+
+  handleChange(info: { file: UploadFile }) {
+    if (info.file.status === 'uploading') {
+      this.loading = true;
+      return;
+    }
+    if (info.file.status === 'done') {
+      // Get this url from response in real world.
+      this.getBase64(info.file.originFileObj, (img: string) => {
+        this.loading = false;
+        this.avatarUrl = img;
+      });
+    }
+  }
 
   hasFile(): boolean {
     return this.newEntity.thumbnail !== '';

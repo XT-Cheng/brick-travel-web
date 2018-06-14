@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FileUploadModule } from '@shared/fileUpload/fileUpload.module';
+import { SharedModule } from '@shared/shared.module';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 import { CityRoutingModule } from './city-routing.module';
@@ -15,6 +17,8 @@ const CITY_COMPONENTS = [
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
+    SharedModule,
     FileUploadModule,
     CityRoutingModule,
     NgZorroAntdModule.forRoot()
