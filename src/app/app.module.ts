@@ -7,9 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from '@core/auth/auth.module';
 import { StartupService } from '@core/startup/startup.service';
 import { StoreModule } from '@core/store/store.module';
-import { WEBAPI_HOST } from '@core/utils/constants';
 import { IonicStorageModule } from '@ionic/storage';
-import { FileUploadModule } from '@shared/fileUpload/fileUpload.module';
 import { JsonSchemaModule } from '@shared/json-schema/json-schema.module';
 
 import { AppComponent } from './app.component';
@@ -45,7 +43,6 @@ export function StartupServiceFactory(startupService: StartupService): Function 
     // Brick Travel Modules
     StoreModule.forRoot(),
     AuthModule.forRoot(),
-    FileUploadModule.forRoot({ url: `${WEBAPI_HOST}/fileUpload` }),
     IonicStorageModule.forRoot()
   ],
   providers: [

@@ -7,7 +7,7 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { SearchService } from '@core/store/providers/search.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
@@ -17,15 +17,21 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     OnInit, OnDestroy {
     //#region Private members
 
+    private _modelRef: NzModalRef;
+
     private oKBtnOption = {
         label: 'OK',
+        type: 'primary',
         disabled: (componentInstance: EntityFormComponent<T, U>) => {
             return componentInstance.isSubmitDisAllowed();
         }
     };
 
     private cancelBtnOption = {
-        label: 'Cancel'
+        label: 'Cancel',
+        onClick: (componentInstance: EntityFormComponent<T, U>) => {
+            this._modelRef.close();
+        }
     };
 
     //#endregion
@@ -70,13 +76,14 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     }
 
     editEntity(entity: U, name: string) {
-        this._modalService.create({
+        this._modelRef = this._modalService.create({
             nzTitle: `Edit ${this.entityDescription} ${name}`,
             nzContent: this.componentType,
             nzComponentParams: {
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
             },
+            nzFooter: [this.oKBtnOption, this.cancelBtnOption],
             nzOnOk: (entityForm: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
                 this._service.change(entityForm.newEntity).subscribe((_) => resolve(), (err) => reject());
             })
