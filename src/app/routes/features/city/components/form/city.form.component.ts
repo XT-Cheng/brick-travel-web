@@ -4,8 +4,6 @@ import { ICity } from '@core/store/entity/model/city.model';
 import { CityService } from '@core/store/providers/city.service';
 import { ErrorService } from '@core/store/providers/error.service';
 import { WEBAPI_HOST } from '@core/utils/constants';
-import { FileItem } from '@shared/fileUpload/providers/file-item';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 import { NzMessageService, NzModalRef, UploadFile } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
@@ -22,9 +20,6 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
 
   //#region Public member
 
-  hasBaseDropZoneOver = false;
-  thumbnailUploader: FileUploader = new FileUploader({ url: `${WEBAPI_HOST}/fileUpload` });
-
   //#endregion
 
   //#region Public property
@@ -36,11 +31,6 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   constructor(protected _cityService: CityService, protected _errorService: ErrorService,
     protected _messageService: NzMessageService, protected _activeModal: NzModalRef) {
     super(_cityService, _errorService, _messageService, _activeModal);
-
-    this.thumbnailUploader.clearQueue();
-    this.thumbnailUploader.setOptions({ allowedMimeType: ['image/png'] });
-
-    this.addFile('thumbnail', this.thumbnailUploader);
   }
 
   //#endregion
@@ -74,22 +64,19 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
     return this.newEntity.thumbnail !== '';
   }
 
-  isSubmitDisAllowed(form): boolean {
-    return !this.isChanged() || !form.valid || (this.thumbnailUploader.queue.length === 0 && this.newEntity.thumbnail === '');
+  isSubmitDisAllowed(): boolean {
+    return false;
+    // return !this.isChanged() || !form.valid || (this.thumbnailUploader.queue.length === 0 && this.newEntity.thumbnail === '');
   }
 
-  fileOverBase(e: boolean): void {
-    this.hasBaseDropZoneOver = e;
-  }
+  fileDropped(fileItems: any[]): void {
+    // const reader = new FileReader();
 
-  fileDropped(fileItems: FileItem[]): void {
-    const reader = new FileReader();
+    // reader.onloadend = (e: any) => {
+    //   this.newEntity.thumbnail = e.target.result;
+    // };
 
-    reader.onloadend = (e: any) => {
-      this.newEntity.thumbnail = e.target.result;
-    };
-
-    reader.readAsDataURL(fileItems[0]._file);
+    // reader.readAsDataURL(fileItems[0]._file);
   }
 
   createOrUpdate() {

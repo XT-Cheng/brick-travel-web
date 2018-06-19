@@ -11,10 +11,25 @@ import { NzModalService } from 'ng-zorro-antd';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
 
-import { ComponentType, EntityFormMode } from './entity.form.component';
+import { ComponentType, EntityFormComponent, EntityFormMode } from './entity.form.component';
 
 export abstract class EntityListComponent<T extends IEntity, U extends IBiz> implements ComponentType,
     OnInit, OnDestroy {
+    //#region Private members
+
+    private oKBtnOption = {
+        label: 'OK',
+        disabled: (componentInstance: EntityFormComponent<T, U>) => {
+            return componentInstance.isSubmitDisAllowed();
+        }
+    };
+
+    private cancelBtnOption = {
+        label: 'Cancel'
+    };
+
+    //#endregion
+
     //#region Protected members
 
     protected destroyed$: Subject<boolean> = new Subject();
@@ -62,7 +77,9 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
             },
-            nzFooter: null
+            nzOnOk: (entityForm: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
+                this._service.change(entityForm.newEntity).subscribe((_) => resolve(), (err) => reject());
+            })
         });
     }
 
@@ -101,7 +118,6 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     //#endregion
 
     //#region Protected methods
-
 
     //#endregion
 

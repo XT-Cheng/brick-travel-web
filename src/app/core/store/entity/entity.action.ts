@@ -5,7 +5,7 @@ import { IError } from '../error/error.model';
 import { IActionMetaInfo, IActionPayload } from '../store.action';
 import { STORE_UI_KEY } from '../ui/ui.model';
 import { EntityTypeEnum, IEntities, STORE_ENTITIES_KEY } from './entity.model';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
+import { UploadFile } from 'ng-zorro-antd';
 
 export enum EntityActionPhaseEnum {
     TRIGGER = 'TRIGGER',
@@ -41,7 +41,7 @@ export interface IEntityActionPayload extends IActionPayload {
     entityType: EntityTypeEnum;
     phaseType: EntityActionPhaseEnum;
     dirtyMode: boolean;
-    files: Map<string, FileUploader>;
+    files: Map<string, any[]>;
 }
 
 // Flux-standard-action gives us stronger typing of our actions.
@@ -227,7 +227,7 @@ export function entityLoadAction(entityType: EntityTypeEnum) {
 
 //#region Update action
 export function entityUpdateAction<U>(entityType: EntityTypeEnum) {
-    return (id: string, bizModel: U, files: Map<string, FileUploader>, dirtyMode: boolean, actionId: string): EntityAction => ({
+    return (id: string, bizModel: U, files: Map<string, any[]>, dirtyMode: boolean, actionId: string): EntityAction => ({
         type: EntityActionTypeEnum.UPDATE,
         meta: defaultEntityActionMeta,
         payload: Object.assign({}, defaultEntityActionPayload, {
@@ -244,7 +244,7 @@ export function entityUpdateAction<U>(entityType: EntityTypeEnum) {
 
 //#region Insert action
 export function entityInsertAction<U>(entityType: EntityTypeEnum) {
-    return (id: string, bizModel: U, files: Map<string, FileUploader>, dirtyMode: boolean, actionId: string): EntityAction => ({
+    return (id: string, bizModel: U, files: Map<string, any[]>, dirtyMode: boolean, actionId: string): EntityAction => ({
         type: EntityActionTypeEnum.INSERT,
         meta: defaultEntityActionMeta,
         payload: Object.assign({}, defaultEntityActionPayload, {

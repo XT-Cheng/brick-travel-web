@@ -5,7 +5,6 @@ import { denormalize, normalize } from 'normalizr';
 import { Observable } from 'rxjs/Observable';
 import * as Immutable from 'seamless-immutable';
 
-
 import {
     IDailyTripBiz,
     ITravelAgendaBiz,
@@ -24,7 +23,7 @@ import { EntityService } from './entity.service';
 import { ErrorService } from './error.service';
 import { TransportationCategoryService } from './transportationCategory.service';
 import { TravelAgendaUIService } from './travelAgenda.ui.service';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
+
 
 @Injectable()
 export class TravelAgendaService extends EntityService<ITravelAgenda, ITravelAgendaBiz> {
@@ -102,11 +101,11 @@ export class TravelAgendaService extends EntityService<ITravelAgenda, ITravelAge
     //#endregion
 
     //#region Public methods
-    public add(biz: ITravelAgendaBiz, files: Map<string, FileUploader> = null): Observable<ITravelAgendaBiz> {
+    public add(biz: ITravelAgendaBiz, files: Map<string, any[]> = null): Observable<ITravelAgendaBiz> {
         return this.insertEntity(biz, files, true);
     }
 
-    public change(biz: ITravelAgendaBiz, files: Map<string, FileUploader> = null): Observable<ITravelAgendaBiz> {
+    public change(biz: ITravelAgendaBiz, files: Map<string, any[]> = null): Observable<ITravelAgendaBiz> {
         return this.updateEntity(biz, files, true);
     }
 

@@ -42,7 +42,6 @@ import { FilterEx } from '../utils/filterEx';
 import { ErrorService } from './error.service';
 import { FetchService } from './fetch.service';
 import { UIService } from './ui.service';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 
 export abstract class EntityService<T extends IEntity, U extends IBiz> extends FetchService {
     //#region Constructor
@@ -337,7 +336,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
 
     //#region Protected methods
 
-    protected insertEntity(bizModel: U, files: Map<string, FileUploader>, dirtyMode: boolean = false): Observable<U> {
+    protected insertEntity(bizModel: U, files: Map<string, any[]>, dirtyMode: boolean = false): Observable<U> {
         const actionId = new ObjectID().toHexString();
         this._store.dispatch(this.insertAction(bizModel.id, bizModel, files, dirtyMode, actionId));
 
@@ -351,7 +350,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
         );
     }
 
-    protected updateEntity(bizModel: U, files: Map<string, FileUploader>, dirtyMode: boolean = false): Observable<U> {
+    protected updateEntity(bizModel: U, files: Map<string, any[]>, dirtyMode: boolean = false): Observable<U> {
         if (dirtyMode && this.isDirtyExist(bizModel.id, DirtyTypeEnum.CREATED)) {
             return this.insertEntity(bizModel, files, dirtyMode);
         } else {
@@ -434,17 +433,16 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
         return found;
     }
 
-    private insert(bizModel: U, files: Map<string, FileUploader>, ): Observable<IEntities> {
+    private insert(bizModel: U, files: Map<string, any[]>): Observable<IEntities> {
         const formData: FormData = new FormData();
 
         formData.append(getEntityKey(this._entityType), JSON.stringify(this.beforeSendInner(bizModel)));
 
         if (files) {
             for (const key of Array.from(files.keys())) {
-                for (let i = 0; i < files.get(key).queue.length; i++) {
-                    formData.append(`${key}${i}`, files.get(key).queue[i]._file, files.get(key).queue[i].file.name);
+                for (let i = 0; i < files.get(key).length; i++) {
+                    formData.append(`${key}${i}`, files.get(key)[i], files.get(key)[i].filename);
                 }
-                files.get(key).clearQueue();
             }
         }
 
@@ -455,17 +453,16 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
         );
     }
 
-    private update(bizModel: U, files: Map<string, FileUploader>, ): Observable<IEntities> {
+    private update(bizModel: U, files: Map<string, any[]>, ): Observable<IEntities> {
         const formData: FormData = new FormData();
 
         formData.append(getEntityKey(this._entityType), JSON.stringify(this.beforeSendInner(bizModel)));
 
         if (files) {
             for (const key of Array.from(files.keys())) {
-                for (let i = 0; i < files.get(key).queue.length; i++) {
-                    formData.append(`${key}${i}`, files.get(key).queue[i]._file, files.get(key).queue[i].file.name);
+                for (let i = 0; i < files.get(key).length; i++) {
+                    formData.append(`${key}${i}`, files.get(key)[i]._file, files.get(key)[i].file.name);
                 }
-                files.get(key).clearQueue();
             }
         }
 
@@ -487,11 +484,11 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
 
     //#region Public methdos
 
-    public add(biz: U, files: Map<string, FileUploader> = null): Observable<U> {
+    public add(biz: U, files: Map<string, any[]> = null): Observable<U> {
         return this.insertEntity(biz, files);
     }
 
-    public change(biz: U, files: Map<string, FileUploader> = null): Observable<U> {
+    public change(biz: U, files: Map<string, any[]> = null): Observable<U> {
         return this.updateEntity(biz, files);
     }
 

@@ -2,9 +2,8 @@ import { IBiz } from '@core/store/bizModel/biz.model';
 import { IEntity } from '@core/store/entity/entity.model';
 import { EntityService } from '@core/store/providers/entity.service';
 import { ErrorService } from '@core/store/providers/error.service';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 import { ObjectID } from 'bson';
-import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
+import { NzMessageService, NzModalRef, UploadFile } from 'ng-zorro-antd';
 
 export enum EntityFormMode {
     create,
@@ -20,7 +19,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     private _newEntity: U;
     private _originalEntity: U;
-    private _filesMap: Map<string, FileUploader> = new Map<string, FileUploader>();
+    private _filesMap: Map<string, UploadFile[]>;
 
     //#endregion
 
@@ -31,6 +30,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#region Public property
     mode: EntityFormMode = EntityFormMode.create;
     title: string;
+    fileList: UploadFile[];
 
     set originalEntity(entity: U) {
         if (entity.id === '') {
@@ -58,7 +58,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Public methods
-    public addFile(key: string, uploader: FileUploader) {
+    public addFile(key: string, uploader: UploadFile[]) {
         this._filesMap.set(key, uploader);
     }
 
@@ -73,5 +73,11 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     public close() {
         this._activeModal.close();
     }
+    //#endregion
+
+    //#region Public abstract methods
+
+    public abstract isSubmitDisAllowed(): boolean;
+
     //#endregion
 }

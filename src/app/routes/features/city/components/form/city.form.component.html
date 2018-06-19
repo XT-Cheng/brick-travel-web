@@ -28,14 +28,14 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="5">City Name</nz-form-label>
     <nz-form-control [nzSpan]="19">
-      <input nz-input btAutofocus required [ngModel]="newEntity.name" name="name" #name='ngModel'>
+      <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
       <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSpan]="5">City Image</nz-form-label>
     <nz-form-control [nzSpan]="19">
-      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture-card" (nzChange)="handleChange($event)"
+      <nz-upload class="avatar-uploader" [(nzFileList)]="fileList" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture-card" (nzChange)="handleChange($event)"
         [nzShowUploadList]="false">
         <ng-container *ngIf="!avatarUrl">
           <i class="anticon anticon-plus"></i>
