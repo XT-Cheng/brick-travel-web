@@ -7,8 +7,6 @@ import { ViewPointService } from '@core/store/providers/viewPoint.service';
 import { ViewPointUIService } from '@core/store/providers/viewPoint.ui.service';
 import { ViewPointCategoryService } from '@core/store/providers/viewPointCategory.service';
 import { WEBAPI_HOST } from '@core/utils/constants';
-import { FileItem } from '@shared/fileUpload/providers/file-item';
-import { FileUploader } from '@shared/fileUpload/providers/file-uploader';
 import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
@@ -21,7 +19,7 @@ import { MapModalComponent } from '../mapModal.component';
 })
 export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IViewPointBiz> {
   //#region Private member
-  private _imagesFiles: Map<string, FileItem> = new Map<string, FileItem>();
+
   //#endregion
 
   //#region Public member
@@ -31,9 +29,6 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   hasImagesDropZoneOver = false;
   hasThumbnailDropZoneOver = false;
-
-  imagesUploader: FileUploader = new FileUploader({ url: `${WEBAPI_HOST}/fileUpload` });
-  thumbnailUploader: FileUploader = new FileUploader({ url: `${WEBAPI_HOST}/fileUpload` });
 
   //#endregion
 
@@ -55,14 +50,14 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     protected _activeModal: NzModalRef) {
     super(_viewPointService, _errorService, _messageService, _activeModal);
 
-    this.imagesUploader.clearQueue();
-    this.imagesUploader.setOptions({ allowedMimeType: ['image/png'] });
+    // this.imagesUploader.clearQueue();
+    // this.imagesUploader.setOptions({ allowedMimeType: ['image/png'] });
 
-    this.thumbnailUploader.clearQueue();
-    this.thumbnailUploader.setOptions({ allowedMimeType: ['image/png'] });
+    // this.thumbnailUploader.clearQueue();
+    // this.thumbnailUploader.setOptions({ allowedMimeType: ['image/png'] });
 
-    this.addFile('images', this.imagesUploader);
-    this.addFile('thumbnail', this.thumbnailUploader);
+    // this.addFile('images', this.imagesUploader);
+    // this.addFile('thumbnail', this.thumbnailUploader);
 
     // this._menuService.onItemClick().subscribe(menuBag => {
     //   if (this.newEntity == null) { return; }
@@ -121,8 +116,9 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     return !!this.newEntity.thumbnail;
   }
 
-  isSubmitDisAllowed(form): boolean {
-    return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
+  isSubmitDisAllowed(): boolean {
+    return false;
+    // return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
   }
 
   imageFileOver(e: boolean): void {
@@ -133,25 +129,25 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     this.hasThumbnailDropZoneOver = e;
   }
 
-  imageFileDropped(fileItems: FileItem[]): void {
-    const reader = new FileReader();
+  imageFileDropped(fileItems: any[]): void {
+    // const reader = new FileReader();
 
-    reader.onloadend = (e: any) => {
-      this.newEntity.images.push(e.target.result);
-      this._imagesFiles.set(e.target.result, fileItems[0]);
-    };
+    // reader.onloadend = (e: any) => {
+    //   this.newEntity.images.push(e.target.result);
+    //   this._imagesFiles.set(e.target.result, fileItems[0]);
+    // };
 
-    reader.readAsDataURL(fileItems[0]._file);
+    // reader.readAsDataURL(fileItems[0]._file);
   }
 
-  thumbnailFileDropped(fileItems: FileItem[]): void {
-    const reader = new FileReader();
+  thumbnailFileDropped(fileItems: any[]): void {
+    // const reader = new FileReader();
 
-    reader.onloadend = (e: any) => {
-      this.newEntity.thumbnail = e.target.result;
-    };
+    // reader.onloadend = (e: any) => {
+    //   this.newEntity.thumbnail = e.target.result;
+    // };
 
-    reader.readAsDataURL(fileItems[0]._file);
+    // reader.readAsDataURL(fileItems[0]._file);
   }
 
   createOrUpdate() {

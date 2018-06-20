@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FileUploadModule } from '@shared/fileUpload/fileUpload.module';
 
 import { TravelAgendaListComponent } from './components/list/travelAgenda.list.component';
 import { TravelAgendaRoutingModule } from './travelAgenda-routing.module';
@@ -10,7 +9,6 @@ const TRAVELAGENDA_COMPONENTS = [
 
 @NgModule({
   imports: [
-    FileUploadModule,
     TravelAgendaRoutingModule
   ],
   declarations: [

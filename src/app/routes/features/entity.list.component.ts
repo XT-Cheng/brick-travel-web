@@ -24,7 +24,17 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
         type: 'primary',
         disabled: (componentInstance: EntityFormComponent<T, U>) => {
             return componentInstance.isSubmitDisAllowed();
-        }
+        },
+        onClick: (componentInstance: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
+            this._service.change(componentInstance.newEntity).subscribe(
+                (_) => {
+                    this._modelRef.close();
+                    resolve();
+                },
+                (err) => {
+                    reject();
+                });
+        })
     };
 
     private cancelBtnOption = {
