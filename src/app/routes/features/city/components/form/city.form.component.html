@@ -35,7 +35,7 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="5">City Image</nz-form-label>
     <nz-form-control [nzSpan]="19">
-      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture-card" 
+      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture" 
       (nzChange)="handleChange($event)" [nzBeforeUpload]="beforeUpload"
         [nzShowUploadList]="false">
         <ng-container *ngIf="!avatarUrl">
