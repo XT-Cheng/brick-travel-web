@@ -398,7 +398,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
     }
 
 
-    protected beforeSendInner(record: U | U[]): any {
+    protected beforeSendInner(record: U | U[]): any[] {
         if (isArray(record)) {
             const ret = [];
             (<U[]>record).forEach((item) => {
@@ -406,7 +406,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
             });
             return ret;
         } else {
-            return this.beforeSend(<U>record);
+            return [this.beforeSend(<U>record)];
         }
     }
 

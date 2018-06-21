@@ -43,7 +43,7 @@ export class TravelAgendaService extends EntityService<ITravelAgenda, ITravelAge
         return bizModel.name.indexOf(searchKey) !== -1;
     }
 
-    protected beforeSend(bizModel: ITravelAgendaBiz) {
+    protected beforeSend(bizModel: ITravelAgendaBiz): any {
         return {
             id: bizModel.id,
             name: bizModel.name,

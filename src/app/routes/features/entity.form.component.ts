@@ -19,7 +19,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     private _newEntity: U;
     private _originalEntity: U;
-    private _filesMap: Map<string, UploadFile[]>;
+    private _filesMap: Map<string, UploadFile[]> = new Map<string, UploadFile[]>();
 
     //#endregion
 
@@ -30,7 +30,6 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#region Public property
     mode: EntityFormMode = EntityFormMode.create;
     title: string;
-    fileList: UploadFile[];
 
     set originalEntity(entity: U) {
         if (entity.id === '') {
@@ -58,10 +57,6 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Public methods
-    public addFile(key: string, uploader: UploadFile[]) {
-        this._filesMap.set(key, uploader);
-    }
-
     public async action() {
         if (this.mode === EntityFormMode.create) {
             return await this._service.add(this._newEntity, this._filesMap).toPromise();
@@ -73,6 +68,18 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     public close() {
         this._activeModal.close();
     }
+    //#endregion
+
+    //#region Protected methods
+
+    protected addFile(key: string, file: UploadFile) {
+        if (this._filesMap.has(key)) {
+            this._filesMap.get(key).push(file);
+        } else {
+            this._filesMap.set(key, [file]);
+        }
+    }
+
     //#endregion
 
     //#region Public abstract methods

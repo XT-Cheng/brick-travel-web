@@ -46,6 +46,16 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
     reader.readAsDataURL(img);
   }
 
+  beforeUpload = (file: any): boolean => {
+    this.getBase64(file, (img: string) => {
+      this.addFile('thumbnail', file);
+      this.loading = false;
+      this.avatarUrl = img;
+    });
+    return false;
+    // return true;
+  }
+
   handleChange(info: { file: UploadFile }) {
     if (info.file.status === 'uploading') {
       this.loading = true;
