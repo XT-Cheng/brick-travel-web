@@ -24,6 +24,7 @@ import { TokenStorage } from '@core/auth/providers/tokenStorage';
 import { TokenService } from '@core/auth/providers/tokenService';
 import { AuthService } from '@core/auth/providers/authService';
 import { JWTInterceptor } from '@delon/auth';
+import { I18NService } from '@core/i18n/i18n.service';
 
 const PROVIDERS = [
   {
@@ -31,6 +32,7 @@ const PROVIDERS = [
     useClass: ErrorInterceptorService,
     multi: true
 },
+I18NService
 // {
 //     provide: HTTP_INTERCEPTORS,
 //     useClass: JWTInterceptor,
