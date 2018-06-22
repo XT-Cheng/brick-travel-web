@@ -26,7 +26,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
             return componentInstance.isSubmitDisAllowed();
         },
         onClick: (componentInstance: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
-            this._service.change(componentInstance.newEntity).subscribe(
+            this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
                 (_) => {
                     this._modelRef.close();
                     resolve();

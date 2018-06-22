@@ -47,6 +47,10 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
         return this._newEntity;
     }
 
+    get files(): Map<string, UploadFile[]> {
+        return this._filesMap;
+    }
+
     //#endregion
 
     //#region Constructor

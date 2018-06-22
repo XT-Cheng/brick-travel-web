@@ -461,7 +461,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
         if (files) {
             for (const key of Array.from(files.keys())) {
                 for (let i = 0; i < files.get(key).length; i++) {
-                    formData.append(`${key}${i}`, files.get(key)[i]._file, files.get(key)[i].file.name);
+                    formData.append(`${key}${i}`, files.get(key)[i], files.get(key)[i].name);
                 }
             }
         }

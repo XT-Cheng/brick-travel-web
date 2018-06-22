@@ -35,14 +35,13 @@
   <nz-form-item>
     <nz-form-label [nzSpan]="5">City Image</nz-form-label>
     <nz-form-control [nzSpan]="19">
-      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture" 
-      (nzChange)="handleChange($event)" [nzBeforeUpload]="beforeUpload"
+      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture-card" [nzBeforeUpload]="beforeUpload"
         [nzShowUploadList]="false">
-        <ng-container *ngIf="!avatarUrl">
+        <ng-container *ngIf="!newEntity.thumbnail">
           <i class="anticon anticon-plus"></i>
           <div class="ant-upload-text">Upload</div>
         </ng-container>
-        <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar">
+        <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail" class="avatar">
       </nz-upload>
       <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
     </nz-form-control>
