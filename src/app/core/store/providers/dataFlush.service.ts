@@ -1,7 +1,6 @@
 import { NgRedux } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { MiddlewareAPI } from 'redux';
 import { Epic } from 'redux-observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
@@ -62,11 +61,11 @@ export class DataFlushService {
         return [this.createFlushEpic()];
     }
 
-    private createFlushEpic(): Epic<DirtyAction, IAppState> {
-        return (action$, store) => action$
+    private createFlushEpic(): Epic<DirtyAction, DirtyAction, IAppState> {
+        return (action$, store$) => action$
             .ofType(DirtyActionTypeEnum.FLUSH).pipe(
                 filter(action => action.payload.phaseType === DirtyActionPhaseEnum.TRIGGER),
-                switchMap(action => this.requestFlush(store).pipe(
+                switchMap(action => this.requestFlush(store$.value).pipe(
                     mergeMap((value: { entityType: EntityTypeEnum, type: DirtyTypeEnum, id: string }) => {
                         this.flushEntity(value);
                         return of(dirtyRemoveAction(value.entityType)(value.id, value.type)).pipe(
@@ -114,12 +113,12 @@ export class DataFlushService {
             }));
     }
 
-    private requestFlush(store: MiddlewareAPI<IAppState>): Observable<any> {
+    private requestFlush(state: IAppState): Observable<any> {
         const ret: { entityType: EntityTypeEnum, type: DirtyTypeEnum, id: string }[] = [];
 
-        Object.keys(store.getState().dirties.dirtyIds).forEach(key => {
-            Object.keys(store.getState().dirties.dirtyIds[key]).forEach(dirtyType => {
-                store.getState().dirties.dirtyIds[key][dirtyType].forEach(id => {
+        Object.keys(state.dirties.dirtyIds).forEach(key => {
+            Object.keys(state.dirties.dirtyIds[key]).forEach(dirtyType => {
+                state.dirties.dirtyIds[key][dirtyType].forEach(id => {
                     ret.push({ entityType: getEntityType(key), type: DirtyTypeEnum[dirtyType.toUpperCase()], id: id });
                 });
             });

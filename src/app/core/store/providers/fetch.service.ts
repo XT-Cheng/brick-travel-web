@@ -49,11 +49,11 @@ export abstract class FetchService {
     //#endregion
 
     //#region Epic
-    public createEpic(): Epic<EntityAction, IAppState>[] {
+    public createEpic(): Epic<EntityAction, EntityAction, IAppState>[] {
         return [this.createEpicOfLoad()];
     }
 
-    private createEpicOfLoad(): Epic<EntityAction, IAppState> {
+    private createEpicOfLoad(): Epic<EntityAction, EntityAction, IAppState> {
         return (action$, store) => action$
             .ofType(EntityActionTypeEnum.LOAD).pipe(
                 filter(action =>

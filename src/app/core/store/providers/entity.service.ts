@@ -251,12 +251,12 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
     //#endregion
 
     //#region Epic
-    public createEpic(): Epic<EntityAction, IAppState>[] {
+    public createEpic(): Epic<EntityAction, EntityAction, IAppState>[] {
         return [...super.createEpic(), this.createEpicOfDML(), this.createEpicOfDMLForDirtyMode()];
     }
 
-    private createEpicOfDML(): Epic<EntityAction, IAppState> {
-        return (action$, store) => action$
+    private createEpicOfDML(): Epic<EntityAction, EntityAction, IAppState> {
+        return (action$, store$) => action$
             .ofType(EntityActionTypeEnum.INSERT, EntityActionTypeEnum.DELETE, EntityActionTypeEnum.UPDATE).pipe(
                 filter(action =>
                     action.payload.entityType === this._entityType
@@ -290,8 +290,8 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
                 }));
     }
 
-    private createEpicOfDMLForDirtyMode(): Epic<EntityAction, IAppState> {
-        return (action$, store) => action$
+    private createEpicOfDMLForDirtyMode(): Epic<EntityAction, EntityAction, IAppState> {
+        return (action$, store$) => action$
             .ofType(EntityActionTypeEnum.INSERT, EntityActionTypeEnum.DELETE, EntityActionTypeEnum.UPDATE).pipe(
                 filter(action =>
                     action.payload.entityType === this._entityType

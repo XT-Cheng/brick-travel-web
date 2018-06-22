@@ -83,10 +83,14 @@ export class StartupService {
 
   private viaHttp(resolve: any, reject: any) {
     this._dataFlushService.restoreState().then((restoredState) => {
+      const epicMiddleware = createEpicMiddleware();
       this._store.configureStore(
         rootReducer,
         <any>Immutable(deepExtend(INIT_APP_STATE, restoredState)),
-        [createLogger({ stateTransformer: stateTransformer }), createEpicMiddleware(this._rootEpics.createEpics())]);
+        [createLogger({ stateTransformer: stateTransformer }), epicMiddleware]);
+
+      epicMiddleware.run(this._rootEpics.createEpics());
+
     }).then(() =>
       this._storage.get(TokenStorage.TOKEN_KEY)
     ).then((value) =>
