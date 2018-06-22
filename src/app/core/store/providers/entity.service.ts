@@ -3,9 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ObjectID } from 'bson';
 import { denormalize, normalize, schema } from 'normalizr';
 import { Epic } from 'redux-observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import {
     catchError,
     combineLatest,

@@ -3,16 +3,15 @@ import { ActivatedRoute } from '@angular/router';
 import { IViewPointBiz, newViewPoint } from '@core/store/bizModel/model/viewPoint.biz.model';
 import { IViewPoint } from '@core/store/entity/model/viewPoint.model';
 import { ErrorService } from '@core/store/providers/error.service';
+import { SearchService } from '@core/store/providers/search.service';
 import { ViewPointService } from '@core/store/providers/viewPoint.service';
 import { ViewPointUIService } from '@core/store/providers/viewPoint.ui.service';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { combineLatest, map, takeUntil } from 'rxjs/operators';
 
 import { EntityListComponent } from '../../../entity.list.component';
 import { ViewPointFormComponent } from '../form/viewPoint.form.component';
-import { SearchService } from '@core/store/providers/search.service';
 
 @Component({
   selector: 'bt-vp-list',

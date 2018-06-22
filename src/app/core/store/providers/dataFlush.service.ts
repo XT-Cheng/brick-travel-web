@@ -2,9 +2,7 @@ import { NgRedux } from '@angular-redux/store';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { Epic } from 'redux-observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { concat, filter, map, mergeMap, startWith, switchMap } from 'rxjs/operators';
 
 import {

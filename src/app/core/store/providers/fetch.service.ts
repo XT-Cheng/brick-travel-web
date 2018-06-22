@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ObjectID } from 'bson';
 import { normalize, schema } from 'normalizr';
 import { Epic } from 'redux-observable';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { Observable, of } from 'rxjs';
 import { catchError, filter, map, mergeMap, startWith } from 'rxjs/operators';
 import { isArray } from 'util';
 
@@ -54,7 +53,7 @@ export abstract class FetchService {
     }
 
     private createEpicOfLoad(): Epic<EntityAction, EntityAction, IAppState> {
-        return (action$, store) => action$
+        return (action$, store$) => action$
             .ofType(EntityActionTypeEnum.LOAD).pipe(
                 filter(action =>
                     action.payload.entityType === this._entityType

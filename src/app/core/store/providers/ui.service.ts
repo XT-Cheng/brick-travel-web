@@ -1,6 +1,5 @@
 import { NgRedux } from '@angular-redux/store';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { IBiz } from '../bizModel/biz.model';
 import { IFilterCategoryBiz } from '../bizModel/model/filterCategory.biz.model';

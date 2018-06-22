@@ -8,8 +8,8 @@ import { SearchService } from '@core/store/providers/search.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 
 import { ComponentType, EntityFormComponent, EntityFormMode } from './entity.form.component';
 

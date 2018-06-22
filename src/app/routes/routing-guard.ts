@@ -1,15 +1,15 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import {
-    ActivatedRouteSnapshot,
-    CanActivate,
-    CanActivateChild,
-    NavigationEnd,
-    Router,
-    RouterStateSnapshot,
+  ActivatedRouteSnapshot,
+  CanActivate,
+  CanActivateChild,
+  NavigationEnd,
+  Router,
+  RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from '@core/auth/providers/authService';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
 @Injectable()

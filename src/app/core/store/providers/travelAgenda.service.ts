@@ -2,15 +2,15 @@ import { NgRedux } from '@angular-redux/store';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { denormalize, normalize } from 'normalizr';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import * as Immutable from 'seamless-immutable';
 
 import {
-    IDailyTripBiz,
-    ITravelAgendaBiz,
-    ITravelViewPointBiz,
-    newDailiyTrip,
-    newTravelViewPoint,
+  IDailyTripBiz,
+  ITravelAgendaBiz,
+  ITravelViewPointBiz,
+  newDailiyTrip,
+  newTravelViewPoint,
 } from '../bizModel/model/travelAgenda.biz.model';
 import { IViewPointBiz } from '../bizModel/model/viewPoint.biz.model';
 import { DirtyTypeEnum } from '../dirty/dirty.action';

@@ -2,7 +2,7 @@ import { NgRedux } from '@angular-redux/store';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { denormalize } from 'normalizr';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { combineLatest } from 'rxjs/operators';
 import * as Immutable from 'seamless-immutable';
 

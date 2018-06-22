@@ -16,7 +16,7 @@ import {
 import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
 import { IDailyTripBiz, ITravelAgendaBiz, ITravelViewPointBiz } from '@core/store/bizModel/model/travelAgenda.biz.model';
 import { IViewPointBiz } from '@core/store/bizModel/model/viewPoint.biz.model';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import { ActionAllowed, InformationWindowComponent } from './information-window/information-window.component';
 import { ViewPointMarkerComponent } from './viewpoint-marker/viewpoint-marker.component';
