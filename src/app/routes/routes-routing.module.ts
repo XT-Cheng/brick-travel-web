@@ -26,6 +26,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'city', pathMatch: 'full' },
       { path: 'city', loadChildren: 'app/routes/features/city/city.module#CityModule' },
+      { path: 'viewPoint', loadChildren: 'app/routes/features/viewPoint/viewPoint.module#ViewPointModule' },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
     ]

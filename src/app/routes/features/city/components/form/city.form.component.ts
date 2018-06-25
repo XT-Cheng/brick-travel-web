@@ -6,7 +6,7 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { WEBAPI_HOST } from '@core/utils/constants';
 import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
 
-import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
+import { EntityFormComponent } from '../../../entity.form.component';
 
 @Component({
   selector: 'bt-city-form',
@@ -47,7 +47,7 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   }
 
   isSubmitDisAllowed(): boolean {
-    return !this.isChanged() || !form.valid || (this.thumbnailUploader.queue.length === 0 && this.newEntity.thumbnail === '');
+    return !this.isChanged() || !this._form.valid || this.newEntity.thumbnail === '';
   }
 
   //#endregion

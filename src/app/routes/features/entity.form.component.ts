@@ -1,3 +1,4 @@
+import { ViewChild } from '@angular/core';
 import { IBiz } from '@core/store/bizModel/biz.model';
 import { IEntity } from '@core/store/entity/entity.model';
 import { EntityService } from '@core/store/providers/entity.service';
@@ -15,6 +16,8 @@ export interface ComponentType {
 }
 
 export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
+    @ViewChild('form') protected _form;
+
     //#region Private member
 
     private _newEntity: U;
@@ -23,12 +26,14 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     //#endregion
 
-    //#region Protected member
-    protected _mode: EntityFormMode = EntityFormMode.create;
+    //#region Public member
+
+    public mode: EntityFormMode = EntityFormMode.create;
+
     //#endregion
 
     //#region Public property
-     get newEntity(): U {
+    get newEntity(): U {
         return this._newEntity;
     }
 
@@ -81,7 +86,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
         reader.readAsDataURL(img);
-      }
+    }
 
     //#endregion
 

@@ -6,7 +6,6 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { ViewPointService } from '@core/store/providers/viewPoint.service';
 import { ViewPointUIService } from '@core/store/providers/viewPoint.ui.service';
 import { ViewPointCategoryService } from '@core/store/providers/viewPointCategory.service';
-import { WEBAPI_HOST } from '@core/utils/constants';
 import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
@@ -156,25 +155,6 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     // reader.readAsDataURL(fileItems[0]._file);
   }
 
-  createOrUpdate() {
-    let successMsg, failMsg;
-
-    if (this._mode === EntityFormMode.create) {
-      successMsg = `View Point ${this.newEntity.name} created`;
-      failMsg = `Can't create view point, pls try later`;
-    } else {
-      successMsg = `View Point ${this.newEntity.name} updated`;
-      failMsg = `Can't change view point, pls try later`;
-    }
-
-    this.action().then((ret) => {
-      this._messageService.success(successMsg);
-      this.close();
-    }, (err) => {
-      this._messageService.error(failMsg);
-    });
-  }
-
   openMap() {
     this._modalService.create({
       nzTitle: 'Modal Title',
@@ -211,7 +191,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   //#region Private method
 
   private isChanged(): boolean {
-    if (this._mode === EntityFormMode.create) { return true; }
+    if (this.mode === EntityFormMode.create) { return true; }
 
     const changed = !(this.newEntity.name === this.originalEntity.name &&
       this.newEntity.city.id === this.originalEntity.city.id &&
