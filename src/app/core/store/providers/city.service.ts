@@ -28,7 +28,9 @@ export class CityService extends EntityService<ICity, ICityBiz> {
     }
 
     protected beforeSend(bizModel: ICityBiz): any {
-        return Object.assign({}, bizModel, {thumbnail: ''});
+        const thumbnail = (bizModel.thumbnail.startsWith(`data:image`)) ? `` : bizModel.thumbnail;
+
+        return Object.assign({}, bizModel, {thumbnail: thumbnail});
     }
 
     //#endregion

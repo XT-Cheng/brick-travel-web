@@ -121,6 +121,12 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     // return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
   }
 
+  get entityName(): string {
+    if (this.newEntity) return this.newEntity.name;
+
+    return '';
+  }
+
   imageFileOver(e: boolean): void {
     this.hasImagesDropZoneOver = e;
   }
@@ -153,7 +159,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   createOrUpdate() {
     let successMsg, failMsg;
 
-    if (this.mode === EntityFormMode.create) {
+    if (this._mode === EntityFormMode.create) {
       successMsg = `View Point ${this.newEntity.name} created`;
       failMsg = `Can't create view point, pls try later`;
     } else {
@@ -205,7 +211,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   //#region Private method
 
   private isChanged(): boolean {
-    if (this.mode === EntityFormMode.create) { return true; }
+    if (this._mode === EntityFormMode.create) { return true; }
 
     const changed = !(this.newEntity.name === this.originalEntity.name &&
       this.newEntity.city.id === this.originalEntity.city.id &&

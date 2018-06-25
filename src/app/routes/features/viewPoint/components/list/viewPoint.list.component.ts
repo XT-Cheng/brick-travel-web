@@ -58,7 +58,7 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
   ngOnInit(): void {
     super.ngOnInit();
 
-    this._route.paramMap.pipe(takeUntil(this.destroyed$))
+    this._route.paramMap.pipe(takeUntil(this._destroyed$))
       .subscribe((paramMap) => {
         this.cityId$.next(paramMap.get('city'));
       });

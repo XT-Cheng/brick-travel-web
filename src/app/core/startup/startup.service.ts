@@ -58,17 +58,13 @@ export class StartupService {
 
   constructor(
     private _menuService: MenuService,
-    private _settingService: SettingsService,
     private _store: NgRedux<IAppState>,
     private _cityService: CityService,
     private _rootEpics: RootEpics,
     private _dataFlushService: DataFlushService,
     private _masterService: MasterDataService,
     private _storage: Storage,
-    private _tokenService: TokenService,
-    private _httpClient: HttpClient,
-    private _injector: Injector
-  ) {
+    private _tokenService: TokenService  ) {
     this._cityService.all$.subscribe(cities => {
       cities.forEach((city) => {
         this.viewPointMenuItem.children.push({
@@ -81,7 +77,7 @@ export class StartupService {
     });
   }
 
-  private viaHttp(resolve: any, reject: any) {
+  private viaHttp(resolve: any) {
     this._dataFlushService.restoreState().then((restoredState) => {
       const epicMiddleware = createEpicMiddleware();
       this._store.configureStore(
@@ -100,10 +96,6 @@ export class StartupService {
     ).then((_) => {
       resolve(null);
     });
-  }
-
-  private prepareMenu(): Menu[] {
-    return [this.testMenuItem, this.cityMenuItem, this.viewPointMenuItem, this.travelAgendaMenuItem];
   }
 
   //   zip(
@@ -189,7 +181,7 @@ export class StartupService {
     // https://github.com/angular/angular/issues/15088
     return new Promise((resolve, reject) => {
       // http
-      this.viaHttp(resolve, reject);
+      this.viaHttp(resolve);
       // mock：请勿在生产环境中这么使用，viaMock 单纯只是为了模拟一些数据使脚手架一开始能正常运行
       // this.viaMock(resolve, reject);
     });

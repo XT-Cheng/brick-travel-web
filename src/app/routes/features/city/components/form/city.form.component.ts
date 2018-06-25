@@ -14,11 +14,14 @@ import { EntityFormComponent, EntityFormMode } from '../../../entity.form.compon
   styleUrls: ['./city.form.component.scss']
 })
 export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
+
   //#region Private member
 
   //#endregion
 
   //#region Public member
+
+  uploadUrl = `${WEBAPI_HOST}/fileUpload`;
 
   //#endregion
 
@@ -35,14 +38,21 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
 
   //#endregion
 
-  //#region Public method
-  uploadUrl = `${WEBAPI_HOST}/fileUpload`;
+  //#region Interface implementation
 
-  private getBase64(img: File, callback: (img: {}) => void): void {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
+  get entityName(): string {
+    if (this.newEntity) return this.newEntity.name;
+
+    return '';
   }
+
+  isSubmitDisAllowed(): boolean {
+    return !this.isChanged() || !form.valid || (this.thumbnailUploader.queue.length === 0 && this.newEntity.thumbnail === '');
+  }
+
+  //#endregion
+
+  //#region Public method
 
   beforeUpload = (file: any): boolean => {
     this.getBase64(file, (img: string) => {
@@ -50,46 +60,12 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
       this.newEntity.thumbnail = img;
     });
     return false;
-    // return true;
   }
 
   hasFile(): boolean {
     return this.newEntity.thumbnail !== '';
   }
 
-  isSubmitDisAllowed(): boolean {
-    return false;
-    // return !this.isChanged() || !form.valid || (this.thumbnailUploader.queue.length === 0 && this.newEntity.thumbnail === '');
-  }
-
-  fileDropped(fileItems: any[]): void {
-    // const reader = new FileReader();
-
-    // reader.onloadend = (e: any) => {
-    //   this.newEntity.thumbnail = e.target.result;
-    // };
-
-    // reader.readAsDataURL(fileItems[0]._file);
-  }
-
-  createOrUpdate() {
-    let successMsg, failMsg;
-
-    if (this.mode === EntityFormMode.create) {
-      successMsg = `City ${this.newEntity.name} created`;
-      failMsg = `Can't create city, pls try later`;
-    } else {
-      successMsg = `City ${this.newEntity.name} updated`;
-      failMsg = `Can't change city, pls try later`;
-    }
-
-    this.action().then((ret) => {
-      this._messageService.success(successMsg);
-      this.close();
-    }, (err) => {
-      this._messageService.error(failMsg);
-    });
-  }
   //#endregion
 
   //#region Private method

@@ -20,12 +20,12 @@ export class LayoutDefaultComponent {
   onActivate(componentRef): void {
     if (componentRef instanceof EntityListComponent) {
       this.entityListComp = componentRef;
-      console.log('Got it');
     }
   }
 
   newEntity() {
-    this.entityListComp.createEntity();
+    if (this.entityListComp)
+      this.entityListComp.createEntity();
   }
 
   isFetching = false;
@@ -44,7 +44,7 @@ export class LayoutDefaultComponent {
       }
       if (evt instanceof NavigationError) {
         this.isFetching = false;
-        _message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
+        this._message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
         return;
       }
       if (!(evt instanceof NavigationEnd)) {

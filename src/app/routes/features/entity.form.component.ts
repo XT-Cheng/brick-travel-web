@@ -23,15 +23,26 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     //#endregion
 
-    //#region Public member
-
+    //#region Protected member
+    protected _mode: EntityFormMode = EntityFormMode.create;
     //#endregion
 
     //#region Public property
-    mode: EntityFormMode = EntityFormMode.create;
-    title: string;
+     get newEntity(): U {
+        return this._newEntity;
+    }
 
-    set originalEntity(entity: U) {
+    get files(): Map<string, UploadFile[]> {
+        return this._filesMap;
+    }
+
+    abstract get entityName(): string;
+
+    //#endregion
+
+    //#region Protected property
+
+    protected set originalEntity(entity: U) {
         if (entity.id === '') {
             entity.id = new ObjectID().toHexString();
         }
@@ -39,16 +50,8 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
         this._newEntity = Object.assign({}, entity);
     }
 
-    get originalEntity(): U {
+    protected get originalEntity(): U {
         return this._originalEntity;
-    }
-
-    get newEntity(): U {
-        return this._newEntity;
-    }
-
-    get files(): Map<string, UploadFile[]> {
-        return this._filesMap;
     }
 
     //#endregion
@@ -61,17 +64,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Public methods
-    public async action() {
-        if (this.mode === EntityFormMode.create) {
-            return await this._service.add(this._newEntity, this._filesMap).toPromise();
-        } else {
-            return await this._service.change(this._newEntity, this._filesMap).toPromise();
-        }
-    }
 
-    public close() {
-        this._activeModal.close();
-    }
     //#endregion
 
     //#region Protected methods
@@ -83,6 +76,12 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
             this._filesMap.set(key, [file]);
         }
     }
+
+    protected getBase64(img: File, callback: (img: {}) => void): void {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+      }
 
     //#endregion
 

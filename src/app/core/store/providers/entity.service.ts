@@ -103,10 +103,11 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
 
     //#region Entity Selector
 
-    protected getById(store: NgRedux<IAppState>, id: string): Observable<U> {
-        return store.select<T>([STORE_KEY.entities, getEntityKey(this._entityType), id]).pipe(
+    private getById(id: string): Observable<U> {
+        return this._store.select<T>([STORE_KEY.entities, getEntityKey(this._entityType), id]).pipe(
             map(ct => {
-                return ct ? denormalize(ct.id, this._entitySchema, Immutable(store.getState().entities).asMutable({ deep: true })) : null;
+                return ct ? denormalize(ct.id, this._entitySchema,
+                    Immutable(this._store.getState().entities).asMutable({ deep: true })) : null;
             })
         );
     }
@@ -338,7 +339,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
         const actionId = new ObjectID().toHexString();
         this._store.dispatch(this.insertAction(bizModel.id, bizModel, files, dirtyMode, actionId));
 
-        return this.getById(this._store, bizModel.id).pipe(
+        return this.getById(bizModel.id).pipe(
             filter((found) => !!found),
             race(this._errorService.getActionError$(actionId).pipe(
                 map((err) => {
@@ -355,7 +356,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
             const actionId = new ObjectID().toHexString();
             this._store.dispatch(this.updateAction(bizModel.id, bizModel, files, dirtyMode, actionId));
 
-            return this.getById(this._store, bizModel.id).pipe(
+            return this.getById(bizModel.id).pipe(
                 race(this._errorService.getActionError$(actionId).pipe(
                     map((err) => {
                         throw err;
@@ -371,7 +372,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
             this._store.dispatch(this.removeDirtyAction(bizModel.id));
             this._store.dispatch(this.succeededAction(<EntityActionTypeEnum>(EntityActionTypeEnum.DELETE), entities));
 
-            return this.getById(this._store, bizModel.id).pipe(
+            return this.getById(bizModel.id).pipe(
                 filter((found) => !found),
                 mapTo(<U>bizModel),
                 take(1));
@@ -379,7 +380,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
             const actionId = new ObjectID().toHexString();
             this._store.dispatch(this.deleteAction(bizModel.id, <U>bizModel, dirtyMode, actionId));
 
-            return this.getById(this._store, bizModel.id).pipe(
+            return this.getById(bizModel.id).pipe(
                 filter((found) => !found),
                 mapTo(<U>bizModel),
                 race(this._errorService.getActionError$(actionId).pipe(
@@ -436,7 +437,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
 
         formData.append(getEntityKey(this._entityType), JSON.stringify(this.beforeSendInner(bizModel)));
 
-        if (files) {
+        if (files && files.size > 0) {
             for (const key of Array.from(files.keys())) {
                 for (let i = 0; i < files.get(key).length; i++) {
                     formData.append(`${key}${i}`, files.get(key)[i], files.get(key)[i].filename);
@@ -456,7 +457,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
 
         formData.append(getEntityKey(this._entityType), JSON.stringify(this.beforeSendInner(bizModel)));
 
-        if (files) {
+        if (files && files.size > 0) {
             for (const key of Array.from(files.keys())) {
                 for (let i = 0; i < files.get(key).length; i++) {
                     formData.append(`${key}${i}`, files.get(key)[i], files.get(key)[i].name);

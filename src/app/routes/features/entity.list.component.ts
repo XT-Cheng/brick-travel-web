@@ -17,42 +17,42 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     OnInit, OnDestroy {
     //#region Private members
 
-    private changeAction = (componentInstance: EntityFormComponent<T, U>) => {
+    private _changeAction = (componentInstance: EntityFormComponent<T, U>) => {
         this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
             (_) => {
                 this._modelRef.close();
-                this._messageService.success(`${name} changed`);
+                this._messageService.success(`${componentInstance.entityName} changed`);
             },
             (err) => {
-                this._messageService.error(`Can't edit city, pls try later`);
+                this._messageService.error(`Can't edit ${this.entityDescription}, pls try later`);
             });
     }
 
-    private deleteAction = (entity: U, name: string ) => (componentInstance: ModalComponent) => {
+    private _deleteAction = (entity: U, name: string ) => (componentInstance: ModalComponent) => {
         this._service.remove(entity).subscribe(
             (_) => {
                 this._modelRef.close();
                 this._messageService.success(`${name} deleted`);
             },
             (err) => {
-                this._messageService.error(`Can't delete city, pls try later`);
+                this._messageService.error(`Can't delete ${this.entityDescription}, pls try later`);
             });
     }
 
-    private createAction = (componentInstance: EntityFormComponent<T, U>) => {
+    private _createAction = (componentInstance: EntityFormComponent<T, U>) => {
         this._service.add(componentInstance.newEntity, componentInstance.files).subscribe(
             (_) => {
                 this._modelRef.close();
-                this._messageService.success(`${name} created`);
+                this._messageService.success(`${componentInstance.entityName} created`);
             },
             (err) => {
-                this._messageService.error(`Can't create city, pls try later`);
+                this._messageService.error(`Can't create ${this.entityDescription}, pls try later`);
             });
     }
 
     private _modelRef: NzModalRef;
 
-    private oKBtnOption = {
+    private _oKBtnOption = {
         label: 'OK',
         type: 'primary',
         disabled: (componentInstance: EntityFormComponent<T, U>) => {
@@ -60,7 +60,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
         }
     };
 
-    private cancelBtnOption = {
+    private _cancelBtnOption = {
         label: 'Cancel',
         onClick: (componentInstance: EntityFormComponent<T, U>) => {
             this._modelRef.close();
@@ -71,7 +71,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     //#region Protected members
 
-    protected destroyed$: Subject<boolean> = new Subject();
+    protected _destroyed$: Subject<boolean> = new Subject();
 
     //#endregion
 
@@ -82,7 +82,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
         protected _messageService: NzMessageService,
         protected _searchService: SearchService, protected _service: EntityService<T, U>) {
         this._service.fetch();
-        this._searchService.onSearchSubmit().pipe(takeUntil(this.destroyed$))
+        this._searchService.onSearchSubmit().pipe(takeUntil(this._destroyed$))
             .subscribe(value => {
                 this._searchService.currentSearchKey = value.term;
                 this._uiService.search(value.term);
@@ -101,40 +101,12 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     //#region Interface implementation
     ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this._destroyed$.next(true);
+        this._destroyed$.complete();
     }
 
     ngOnInit(): void {
         this._searchService.currentSearchKey = this._uiService.searchKey;
-    }
-
-    editEntity(entity: U, name: string) {
-        this._modelRef = this._modalService.create({
-            nzTitle: `Edit ${this.entityDescription} ${name}`,
-            nzContent: this.componentType,
-            nzComponentParams: {
-                mode: EntityFormMode.edit,
-                originalEntity: entity,
-            },
-            nzFooter: [{...this.oKBtnOption, ...{onClick: this.changeAction}}, this.cancelBtnOption]
-        });
-    }
-
-    deleteEntity(entity: U, name: string) {
-        this._modelRef = this._modalService.create({
-            nzTitle: `Delete ${this.entityDescription} ${name}`,
-            nzContent: ModalComponent,
-            nzComponentParams: {
-                modalHeader: `Confrim`,
-                modalContent: `Delete ${name}, are you sure?`
-            },
-            nzFooter: [{...this.oKBtnOption, ...{disabled: () => false, onClick: this.deleteAction(entity, name)}},
-                {label: 'Cancel', onClick: () => {
-                        this._modelRef.close();
-                    }
-                }]
-        });
     }
 
     createEntity() {
@@ -145,7 +117,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 mode: EntityFormMode.create,
                 originalEntity: this.newEntity,
             },
-            nzFooter: [{...this.oKBtnOption, ...{onClick: this.createAction}}, this.cancelBtnOption]
+            nzFooter: [{...this._oKBtnOption, ...{onClick: this._createAction}}, this._cancelBtnOption]
         });
     }
 
@@ -156,7 +128,33 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     //#endregion
 
     //#region Protected methods
+    protected editEntity(entity: U, name: string) {
+        this._modelRef = this._modalService.create({
+            nzTitle: `Edit ${this.entityDescription} ${name}`,
+            nzContent: this.componentType,
+            nzComponentParams: {
+                mode: EntityFormMode.edit,
+                originalEntity: entity,
+            },
+            nzFooter: [{...this._oKBtnOption, ...{onClick: this._changeAction}}, this._cancelBtnOption]
+        });
+    }
 
+    protected deleteEntity(entity: U, name: string) {
+        this._modelRef = this._modalService.create({
+            nzTitle: `Delete ${this.entityDescription} ${name}`,
+            nzContent: ModalComponent,
+            nzComponentParams: {
+                modalHeader: `Confrim`,
+                modalContent: `Delete ${name}, are you sure?`
+            },
+            nzFooter: [{...this._oKBtnOption, ...{disabled: () => false, onClick: this._deleteAction(entity, name)}},
+                {label: 'Cancel', onClick: () => {
+                        this._modelRef.close();
+                    }
+                }]
+        });
+    }
     //#endregion
 
 }
