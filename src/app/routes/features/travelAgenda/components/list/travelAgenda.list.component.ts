@@ -32,7 +32,7 @@ export class TravelAgendaListComponent extends EntityListComponent<ITravelAgenda
     protected _errorService: ErrorService,
     public _travelAgendaService: TravelAgendaService, protected _travelAgendaUIService: TravelAgendaUIService,
     protected _messageService: NzMessageService) {
-    super(_route, _travelAgendaUIService, _errorService, _modalService, _searchService, _travelAgendaService);
+    super(_route, _travelAgendaUIService, _errorService, _modalService, _messageService, _searchService, _travelAgendaService);
   }
 
   //#endregion
@@ -59,13 +59,7 @@ export class TravelAgendaListComponent extends EntityListComponent<ITravelAgenda
   }
 
   delete(travelAgenda: ITravelAgendaBiz) {
-    this.deleteEntity(travelAgenda, travelAgenda.name).then((ret) => {
-      if (ret) {
-        this._messageService.success(`Travel Agenda ${travelAgenda.name} deleted`);
-      }
-    }, (err) => {
-      this._messageService.error(`Can't delete Travel Agenda, pls try later`);
-    });
+    this.deleteEntity(travelAgenda, travelAgenda.name);
   }
 
   //#endregion

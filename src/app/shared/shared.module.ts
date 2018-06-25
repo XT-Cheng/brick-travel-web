@@ -15,6 +15,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { CountdownModule } from 'ngx-countdown';
 import { RateComponent } from '@shared/components/a-map/rate/rate.component';
 import { ViewPointMarkerComponent } from '@shared/components/a-map/viewpoint-marker/viewpoint-marker.component';
+import { QuickMenuComponent } from '@shared/components/quick-menu.component';
 
 // delon
 // region: third libs
@@ -25,7 +26,14 @@ const THIRDMODULES = [
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [ModalComponent, InformationWindowComponent, AMapComponent, RateComponent, ViewPointMarkerComponent];
+const COMPONENTS = [
+  ModalComponent,
+  InformationWindowComponent,
+  AMapComponent,
+  RateComponent,
+  ViewPointMarkerComponent,
+  QuickMenuComponent
+];
 const DIRECTIVES = [AutofocusDirective, DragulaDirective];
 const ENTRIES = [InformationWindowComponent, ViewPointMarkerComponent, ModalComponent];
 // endregion

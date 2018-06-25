@@ -27,7 +27,7 @@ export class CityListComponent extends EntityListComponent<ICity, ICityBiz> {
     protected _errorService: ErrorService,
     protected _searchService: SearchService, protected _modalService: NzModalService, public _cityService: CityService,
     protected _messageService: NzMessageService) {
-    super(_route, _cityUIService, _errorService, _modalService, _searchService, _cityService);
+    super(_route, _cityUIService, _errorService, _modalService, _messageService, _searchService, _cityService);
   }
   //#endregion
 
@@ -52,13 +52,7 @@ export class CityListComponent extends EntityListComponent<ICity, ICityBiz> {
   }
 
   delete(city: ICityBiz) {
-    this.deleteEntity(city, city.name).then((ret) => {
-      if (ret) {
-        this._messageService.success(`City ${city.name} deleted`);
-      }
-    }, (err) => {
-      this._messageService.error(`Can't delete city, pls try later`);
-    });
+    this.deleteEntity(city, city.name);
   }
 
   //#endregion

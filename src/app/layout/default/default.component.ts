@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, AfterContentInit, ContentChild } from '@angular/core';
 import {
   Router,
   NavigationEnd,
@@ -7,12 +7,27 @@ import {
 } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ScrollService, MenuService, SettingsService } from '@delon/theme';
+import { EntityListComponent } from '../../routes/features/entity.list.component';
+import { ComponentType } from '../../routes/features/entity.form.component';
 
 @Component({
   selector: 'layout-default',
   templateUrl: './default.component.html',
 })
 export class LayoutDefaultComponent {
+  private entityListComp: ComponentType;
+
+  onActivate(componentRef): void {
+    if (componentRef instanceof EntityListComponent) {
+      this.entityListComp = componentRef;
+      console.log('Got it');
+    }
+  }
+
+  newEntity() {
+    this.entityListComp.createEntity();
+  }
+
   isFetching = false;
 
   constructor(

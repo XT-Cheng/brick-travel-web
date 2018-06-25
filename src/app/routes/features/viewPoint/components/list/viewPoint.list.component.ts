@@ -37,7 +37,7 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
     protected _errorService: ErrorService,
     protected _searchService: SearchService, protected _modalService: NzModalService, public _viewPointService: ViewPointService,
     protected _messageService: NzMessageService) {
-    super(_route, _viewPointUIService, _errorService, _modalService, _searchService, _viewPointService);
+    super(_route, _viewPointUIService, _errorService, _modalService, _messageService, _searchService, _viewPointService);
 
     this.viewPointsByCity$ = this._viewPointService.filteredAndSearched$.pipe(
       combineLatest(this.cityId$),
@@ -84,13 +84,7 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
   }
 
   delete(viewPoint: IViewPointBiz) {
-    this.deleteEntity(viewPoint, viewPoint.name).then((ret) => {
-      if (ret) {
-        this._messageService.success(`ViewPoint ${viewPoint.name} deleted`);
-      }
-    }, (err) => {
-      this._messageService.error(`Can't delete view point, pls try later`);
-    });
+    this.deleteEntity(viewPoint, viewPoint.name);
   }
 
   //#endregion

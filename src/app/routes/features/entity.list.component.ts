@@ -7,7 +7,7 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { SearchService } from '@core/store/providers/search.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -17,6 +17,39 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     OnInit, OnDestroy {
     //#region Private members
 
+    private changeAction = (componentInstance: EntityFormComponent<T, U>) => {
+        this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
+            (_) => {
+                this._modelRef.close();
+                this._messageService.success(`${name} changed`);
+            },
+            (err) => {
+                this._messageService.error(`Can't edit city, pls try later`);
+            });
+    }
+
+    private deleteAction = (entity: U, name: string ) => (componentInstance: ModalComponent) => {
+        this._service.remove(entity).subscribe(
+            (_) => {
+                this._modelRef.close();
+                this._messageService.success(`${name} deleted`);
+            },
+            (err) => {
+                this._messageService.error(`Can't delete city, pls try later`);
+            });
+    }
+
+    private createAction = (componentInstance: EntityFormComponent<T, U>) => {
+        this._service.add(componentInstance.newEntity, componentInstance.files).subscribe(
+            (_) => {
+                this._modelRef.close();
+                this._messageService.success(`${name} created`);
+            },
+            (err) => {
+                this._messageService.error(`Can't create city, pls try later`);
+            });
+    }
+
     private _modelRef: NzModalRef;
 
     private oKBtnOption = {
@@ -24,17 +57,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
         type: 'primary',
         disabled: (componentInstance: EntityFormComponent<T, U>) => {
             return componentInstance.isSubmitDisAllowed();
-        },
-        onClick: (componentInstance: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
-            this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
-                (_) => {
-                    this._modelRef.close();
-                    resolve();
-                },
-                (err) => {
-                    reject();
-                });
-        })
+        }
     };
 
     private cancelBtnOption = {
@@ -56,6 +79,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     constructor(protected _route: ActivatedRoute, protected _uiService: UIService<T, U>,
         protected _errorService: ErrorService, protected _modalService: NzModalService,
+        protected _messageService: NzMessageService,
         protected _searchService: SearchService, protected _service: EntityService<T, U>) {
         this._service.fetch();
         this._searchService.onSearchSubmit().pipe(takeUntil(this.destroyed$))
@@ -93,38 +117,35 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
             },
-            nzFooter: [this.oKBtnOption, this.cancelBtnOption],
-            nzOnOk: (entityForm: EntityFormComponent<T, U>) => new Promise((resolve, reject) => {
-                this._service.change(entityForm.newEntity).subscribe((_) => resolve(), (err) => reject());
-            })
+            nzFooter: [{...this.oKBtnOption, ...{onClick: this.changeAction}}, this.cancelBtnOption]
         });
     }
 
-    async deleteEntity(entity: U, name: string) {
-        this._modalService.confirm(
-            {
-                nzContent: ModalComponent,
-                nzComponentParams: {
-                    modalHeader: `Confrim`,
-                    modalContent: `Delete ${name}, are you sure?`
-                },
-                nzOnOk: () => new Promise((resolve, reject) => {
-                    this._service.remove(entity).subscribe((_) => resolve(), (err) => reject());
-                })
-            });
-
+    deleteEntity(entity: U, name: string) {
+        this._modelRef = this._modalService.create({
+            nzTitle: `Delete ${this.entityDescription} ${name}`,
+            nzContent: ModalComponent,
+            nzComponentParams: {
+                modalHeader: `Confrim`,
+                modalContent: `Delete ${name}, are you sure?`
+            },
+            nzFooter: [{...this.oKBtnOption, ...{disabled: () => false, onClick: this.deleteAction(entity, name)}},
+                {label: 'Cancel', onClick: () => {
+                        this._modelRef.close();
+                    }
+                }]
+        });
     }
 
     createEntity() {
-        this._modalService.create({
-            nzTitle: 'Modal Title',
+        this._modelRef = this._modalService.create({
+            nzTitle: `Create ${this.entityDescription}`,
             nzContent: this.componentType,
             nzComponentParams: {
-                mode: EntityFormMode.edit,
+                mode: EntityFormMode.create,
                 originalEntity: this.newEntity,
-                title: `Create ${this.entityDescription}`
             },
-            nzFooter: null
+            nzFooter: [{...this.oKBtnOption, ...{onClick: this.createAction}}, this.cancelBtnOption]
         });
     }
 
