@@ -26,24 +26,24 @@
 </nb-card> -->
 <form #form="ngForm" nz-form>
   <nz-form-item>
-    <nz-form-label [nzSpan]="5">City Name</nz-form-label>
-    <nz-form-control [nzSpan]="19">
+    <nz-form-label nzRequired [nzSpan]="5">City Name</nz-form-label>
+    <nz-form-control [nzValidateStatus]="isNameInValid(name)?'error':'success'" [nzSpan]="19">
       <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
-      <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
+      <nz-form-explain *ngIf="isNameInValid(name)"> Name is required! </nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
-    <nz-form-label [nzSpan]="5">City Image</nz-form-label>
-    <nz-form-control [nzSpan]="19">
-      <nz-upload class="avatar-uploader" [nzAction]="uploadUrl" nzName="avatar" nzListType="picture-card" [nzBeforeUpload]="beforeUpload"
+    <nz-form-label nzRequired [nzSpan]="5">City Image</nz-form-label>
+    <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
+      <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeUpload"
         [nzShowUploadList]="false">
         <ng-container *ngIf="!newEntity.thumbnail">
           <i class="anticon anticon-plus"></i>
           <div class="ant-upload-text">Upload</div>
         </ng-container>
-        <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail" class="avatar">
+        <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail">
       </nz-upload>
-      <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
+      <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 </form>

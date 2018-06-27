@@ -141,3 +141,26 @@
 
   </nb-card-body>
 </nb-card> -->
+<form #form="ngForm" nz-form>
+  <nz-tabset>
+    <nz-tab nzTitle="General">
+        <nz-form-item>
+            <nz-form-label nzRequired [nzSpan]="5">Name</nz-form-label>
+            <nz-form-control [nzSpan]="19">
+              <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
+              <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+            <nz-form-label nzRequired [nzSpan]="5">Category</nz-form-label>
+            <nz-form-control [nzSpan]="19">
+              <nz-select #category='ngModel' required [compareWith]="compareCityFn" [(ngModel)]='newEntity.category'
+                name='category' class="form-control" [class.danger]="category.invalid">
+                <nz-option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [nzLabel]="category.name" [nzValue]="category"></nz-option>
+              </nz-select>
+              <nz-form-explain *ngIf="category.invalid && category.touched &&  category?.errors?.required"> Category is required! </nz-form-explain>
+            </nz-form-control>
+        </nz-form-item>
+    </nz-tab>
+  </nz-tabset>
+</form>

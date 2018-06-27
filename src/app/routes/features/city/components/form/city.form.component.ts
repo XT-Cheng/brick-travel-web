@@ -7,6 +7,7 @@ import { WEBAPI_HOST } from '@core/utils/constants';
 import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
 
 import { EntityFormComponent } from '../../../entity.form.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'bt-city-form',
@@ -54,6 +55,17 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
 
   //#region Public method
 
+  isNameInValid(name: FormControl): boolean {
+    if (name && name.errors)
+      return name.invalid && name.touched && name.errors.required;
+
+    return false;
+  }
+
+  isThumbnailInValid(): boolean {
+    return this.files.size === 0;
+  }
+
   beforeUpload = (file: any): boolean => {
     this.getBase64(file, (img: string) => {
       this.addFile('thumbnail', file);
@@ -75,4 +87,5 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
       this.newEntity.addressCode === this.originalEntity.addressCode &&
       this.newEntity.thumbnail === this.originalEntity.thumbnail);
   }
+
 }
