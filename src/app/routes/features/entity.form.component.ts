@@ -70,6 +70,10 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     //#region Public methods
 
+    public isSubmitDisAllowed(): boolean {
+        return !this.isChanged() || !this._form.valid;
+    }
+
     //#endregion
 
     //#region Protected methods
@@ -92,7 +96,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     //#region Public abstract methods
 
-    public abstract isSubmitDisAllowed(): boolean;
+    public abstract isChanged(): boolean;
 
     //#endregion
 }

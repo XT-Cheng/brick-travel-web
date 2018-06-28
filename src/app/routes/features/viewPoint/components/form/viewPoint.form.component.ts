@@ -10,6 +10,7 @@ import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
 import { MapModalComponent } from '../mapModal.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'bt-vp-form',
@@ -22,19 +23,10 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   //#endregion
 
   //#region Public member
-  items = [{
-    title: 'Delete'
-  }];
-
-  hasImagesDropZoneOver = false;
-  hasThumbnailDropZoneOver = false;
 
   //#endregion
 
   //#region Public property
-  selectedCity: any = null;
-
-  @ViewChild('name', { read: ElementRef }) nameInput: ElementRef;
 
   // @ViewChildren(NbContextMenuDirective) contextMenus;
 
@@ -48,111 +40,38 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     protected _messageService: NzMessageService,
     protected _activeModal: NzModalRef) {
     super(_viewPointService, _errorService, _messageService, _activeModal);
-
-    // this.imagesUploader.clearQueue();
-    // this.imagesUploader.setOptions({ allowedMimeType: ['image/png'] });
-
-    // this.thumbnailUploader.clearQueue();
-    // this.thumbnailUploader.setOptions({ allowedMimeType: ['image/png'] });
-
-    // this.addFile('images', this.imagesUploader);
-    // this.addFile('thumbnail', this.thumbnailUploader);
-
-    // this._menuService.onItemClick().subscribe(menuBag => {
-    //   if (this.newEntity == null) { return; }
-
-    //   const { file, source } = menuBag.item.data;
-
-    //   if (file) {
-    //     this.imagesUploader.removeFromQueue(file);
-    //   }
-    //   const index = this.newEntity.images.findIndex((img) => {
-    //     return img === source;
-    //   });
-    //   if (index !== -1) {
-    //     this.newEntity.images.splice(index, 1);
-    //   }
-
-    //   this.contextMenus.forEach(item => {
-    //     item.hide();
-    //   });
-    // });
   }
 
   //#endregion
 
   //#region Public method
-  compareCityFn(c1: any, c2: any): boolean {
-    return c1 && c2 ? c1.id === c2.id : c1 === c2;
-  }
 
-  getMenuItem(img: string) /*: NbMenuItem[] */ {
-    // const fileItem = this._imagesFiles.get(img);
+  isNameInValid(name: FormControl): boolean {
+    if (name && name.errors)
+      return name.invalid && name.touched && name.errors.required;
 
-    // return [{
-    //   title: 'Delete',
-    //   data: { file: fileItem, source: img }
-    // }];
-  }
-
-  getClientHeight() {
-    return this._element.nativeElement.clientHeight;
-  }
-
-  hasCity(): boolean {
-    return !!this.newEntity.city;
-  }
-
-  hasPosition(): boolean {
-    return (!!this.newEntity.latitude && !!this.newEntity.longtitude);
-  }
-
-  hasImageFiles(): boolean {
-    return this.newEntity.images.length > 0;
-  }
-
-  hasThumbnailFile(): boolean {
-    return !!this.newEntity.thumbnail;
-  }
-
-  isSubmitDisAllowed(): boolean {
     return false;
-    // return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
   }
 
-  get entityName(): string {
-    if (this.newEntity) return this.newEntity.name;
+  isCategoryInValid(category: FormControl): boolean {
+    if (category && category.errors)
+      return category.invalid && category.touched &&  category.errors.required;
 
-    return '';
+    return false;
   }
 
-  imageFileOver(e: boolean): void {
-    this.hasImagesDropZoneOver = e;
+  isRankInValid(rank: FormControl): boolean {
+    if (rank && rank.errors)
+      return rank.invalid && rank.touched &&  rank.errors.required;
+
+    return false;
   }
 
-  thumbnailFileOver(e: boolean): void {
-    this.hasThumbnailDropZoneOver = e;
-  }
+  isTimeNeededInValid(timeNeeded: FormControl): boolean {
+    if (timeNeeded && timeNeeded.errors)
+      return timeNeeded.invalid && timeNeeded.touched &&  timeNeeded.errors.required;
 
-  imageFileDropped(fileItems: any[]): void {
-    // const reader = new FileReader();
-
-    // reader.onloadend = (e: any) => {
-    //   this.newEntity.images.push(e.target.result);
-    //   this._imagesFiles.set(e.target.result, fileItems[0]);
-    // };
-
-    // reader.readAsDataURL(fileItems[0]._file);
-  }
-
-  thumbnailFileDropped(fileItems: any[]): void {
-    // const reader = new FileReader();
-
-    // reader.onloadend = (e: any) => {
-    //   this.newEntity.thumbnail = e.target.result;
-    // };
-
-    // reader.readAsDataURL(fileItems[0]._file);
+    return false;
   }
 
   openMap() {
@@ -186,11 +105,23 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     // });
   }
 
+
   //#endregion
 
-  //#region Private method
+  //#region Interface implementation
 
-  private isChanged(): boolean {
+  isSubmitDisAllowed(): boolean {
+    return super.isSubmitDisAllowed(); // || this.newEntity.images.length === 0;
+    // return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
+  }
+
+  get entityName(): string {
+    if (this.newEntity) return this.newEntity.name;
+
+    return '';
+  }
+
+  isChanged(): boolean {
     if (this.mode === EntityFormMode.create) { return true; }
 
     const changed = !(this.newEntity.name === this.originalEntity.name &&
@@ -217,4 +148,10 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
     return false;
   }
+
+  //#endregion
+
+  //#region Private method
+
+  //#endregion
 }

@@ -146,21 +146,40 @@
     <nz-tab nzTitle="General">
         <nz-form-item>
             <nz-form-label nzRequired [nzSpan]="5">Name</nz-form-label>
-            <nz-form-control [nzSpan]="19">
+            <nz-form-control [nzValidateStatus]="isNameInValid(name)?'error':'success'" [nzSpan]="19">
               <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
-              <nz-form-explain *ngIf="name.invalid && name.touched && name?.errors?.required"> Name is required! </nz-form-explain>
+              <nz-form-explain *ngIf="isNameInValid(name)"> Name is required! </nz-form-explain>
             </nz-form-control>
         </nz-form-item>
         <nz-form-item>
             <nz-form-label nzRequired [nzSpan]="5">Category</nz-form-label>
-            <nz-form-control [nzSpan]="19">
-              <nz-select #category='ngModel' required [compareWith]="compareCityFn" [(ngModel)]='newEntity.category'
-                name='category' class="form-control" [class.danger]="category.invalid">
+            <nz-form-control [nzValidateStatus]="isCategoryInValid(category)?'error':'success'" [nzSpan]="19">
+              <nz-select #category='ngModel' required [(ngModel)]='newEntity.category'
+                name='category'>
                 <nz-option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [nzLabel]="category.name" [nzValue]="category"></nz-option>
               </nz-select>
-              <nz-form-explain *ngIf="category.invalid && category.touched &&  category?.errors?.required"> Category is required! </nz-form-explain>
+              <nz-form-explain *ngIf="isCategoryInValid(category)"> Category is required! </nz-form-explain>
             </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired [nzSpan]="5">Rank</nz-form-label>
+          <nz-form-control [nzValidateStatus]="isRankInValid(rank)?'error':'success'" [nzSpan]="19">
+            <nz-rate #rank='ngModel' required [(ngModel)]='newEntity.rank'
+              name='rank'>
+            </nz-rate>
+            <nz-form-explain *ngIf="isRankInValid(rank)"> Rank is required! </nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label nzRequired [nzSpan]="5">Time</nz-form-label>
+          <nz-form-control [nzValidateStatus]="isTimeNeededInValid(timeNeeded)?'error':'success'" [nzSpan]="19">
+            <nz-input-number required [nzAutoFocus]='true' [nzStep]="0.1" [nzPlaceHolder]='"Time"' #timeNeeded='ngModel' required [(ngModel)]='newEntity.timeNeeded'
+              name='timeNeeded'>
+            </nz-input-number>
+            <nz-form-explain *ngIf="isTimeNeededInValid(timeNeeded)"> Time Needed is required! </nz-form-explain>
+          </nz-form-control>
         </nz-form-item>
     </nz-tab>
   </nz-tabset>
 </form>
+<!-- btAutofocus -->

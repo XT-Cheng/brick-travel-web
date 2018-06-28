@@ -48,7 +48,13 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   }
 
   isSubmitDisAllowed(): boolean {
-    return !this.isChanged() || !this._form.valid || this.newEntity.thumbnail === '';
+    return super.isSubmitDisAllowed() || this.newEntity.thumbnail === '';
+  }
+
+  isChanged(): boolean {
+    return !(this.newEntity.name === this.originalEntity.name &&
+      this.newEntity.addressCode === this.originalEntity.addressCode &&
+      this.newEntity.thumbnail === this.originalEntity.thumbnail);
   }
 
   //#endregion
@@ -63,7 +69,7 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   }
 
   isThumbnailInValid(): boolean {
-    return this.files.size === 0;
+    return !this.newEntity.thumbnail && this.files.size === 0;
   }
 
   beforeUpload = (file: any): boolean => {
@@ -74,18 +80,8 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
     return false;
   }
 
-  hasFile(): boolean {
-    return this.newEntity.thumbnail !== '';
-  }
-
   //#endregion
 
   //#region Private method
-
-  private isChanged(): boolean {
-    return !(this.newEntity.name === this.originalEntity.name &&
-      this.newEntity.addressCode === this.originalEntity.addressCode &&
-      this.newEntity.thumbnail === this.originalEntity.thumbnail);
-  }
 
 }
