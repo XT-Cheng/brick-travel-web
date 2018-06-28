@@ -6,6 +6,7 @@ import { environment } from './environments/environment';
 
 // import { preloaderFinished } from '@delon/theme';
 // preloaderFinished();
+// check git
 
 if (environment.production) {
   enableProdMode();
