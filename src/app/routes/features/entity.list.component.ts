@@ -12,10 +12,12 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { ComponentType, EntityFormComponent, EntityFormMode } from './entity.form.component';
+import { LayoutDefaultComponent } from '../../layout/default/default.component';
 
 export abstract class EntityListComponent<T extends IEntity, U extends IBiz> implements ComponentType,
     OnInit, OnDestroy {
     //#region Private members
+    private _layoutCmp: LayoutDefaultComponent;
 
     private _changeAction = (componentInstance: EntityFormComponent<T, U>) => {
         this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
@@ -99,6 +101,18 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     //#endregion
 
+    //#region Public property
+
+    get layoutComp(): LayoutDefaultComponent {
+        return this._layoutCmp;
+    }
+
+    set layoutComp(layout: LayoutDefaultComponent) {
+        this._layoutCmp = layout;
+    }
+
+    //#endregion
+
     //#region Interface implementation
     ngOnDestroy(): void {
         this._destroyed$.next(true);
@@ -116,6 +130,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
             nzComponentParams: {
                 mode: EntityFormMode.create,
                 originalEntity: this.newEntity,
+                ...this.entityCompParas
             },
             nzFooter: [{...this._oKBtnOption, ...{onClick: this._createAction}}, this._cancelBtnOption]
         });
@@ -127,7 +142,17 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
 
     //#endregion
 
+    //#region Private methods
+    private _onReuseInit() {
+        this._layoutCmp.entityListComp = this;
+    }
+    //#endregion
+
     //#region Protected methods
+    protected get entityCompParas(): any {
+        return {};
+    }
+
     protected editEntity(entity: U, name: string) {
         this._modelRef = this._modalService.create({
             nzTitle: `Edit ${this.entityDescription} ${name}`,
@@ -156,5 +181,4 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
         });
     }
     //#endregion
-
 }

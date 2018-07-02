@@ -11,7 +11,7 @@ export interface IViewPointBiz extends IBiz {
     city: ICityBiz;
     description: string;
     tips: string;
-    timeNeeded: string;
+    timeNeeded: number;
     thumbnail: string;
     address: string;
     latitude: number;
@@ -40,7 +40,7 @@ export function newViewPoint(): IViewPointBiz {
         city: null,
         description: '',
         tips: '',
-        timeNeeded: '',
+        timeNeeded: 0,
         thumbnail: '',
         address: '',
         latitude: null,

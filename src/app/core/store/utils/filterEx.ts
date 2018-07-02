@@ -7,6 +7,6 @@ export class FilterEx {
     }
 
     static filterByNeedTime(viewPoint: IViewPointBiz, criteria: IFilterCriteriaBiz): boolean {
-        return viewPoint.timeNeeded === criteria.criteria;
+        return viewPoint.timeNeeded === parseFloat(criteria.criteria);
     }
 }

@@ -11,6 +11,7 @@ import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
 import { MapModalComponent } from '../mapModal.component';
 import { FormControl } from '@angular/forms';
+import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
 
 @Component({
   selector: 'bt-vp-form',
@@ -22,13 +23,13 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   //#endregion
 
-  //#region Public member
+  //#region Protected member
+
+  protected selectedCity: ICityBiz;
 
   //#endregion
 
-  //#region Public property
-
-  // @ViewChildren(NbContextMenuDirective) contextMenus;
+  //#region Protected property
 
   //#endregion
 
@@ -44,75 +45,10 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   //#endregion
 
-  //#region Public method
-
-  isNameInValid(name: FormControl): boolean {
-    if (name && name.errors)
-      return name.invalid && name.touched && name.errors.required;
-
-    return false;
-  }
-
-  isCategoryInValid(category: FormControl): boolean {
-    if (category && category.errors)
-      return category.invalid && category.touched &&  category.errors.required;
-
-    return false;
-  }
-
-  isRankInValid(rank: FormControl): boolean {
-    if (rank && rank.errors)
-      return rank.invalid && rank.touched &&  rank.errors.required;
-
-    return false;
-  }
-
-  isTimeNeededInValid(timeNeeded: FormControl): boolean {
-    if (timeNeeded && timeNeeded.errors)
-      return timeNeeded.invalid && timeNeeded.touched &&  timeNeeded.errors.required;
-
-    return false;
-  }
-
-  openMap() {
-    this._modalService.create({
-      nzTitle: 'Modal Title',
-      nzContent: MapModalComponent,
-      nzComponentParams: {
-        minHeight: 500,
-        city: this.newEntity.city
-      },
-      nzFooter: null
-    });
-
-    // const activeModal = this._modalService.open(MapModalComponent, { backdrop: false, size: 'lg', container: 'nb-layout' });
-    // activeModal.componentInstance.minHeight = 500;
-    // activeModal.componentInstance.city = this.newEntity.city;
-
-    this._element.nativeElement.style.display = 'none';
-
-    // if (this.newEntity.latitude) {
-    //   activeModal.componentInstance.pointChoosed = new AMap.LngLat(this.newEntity.longtitude, this.newEntity.latitude);
-    // }
-    // activeModal.result.then((pos: AMap.LngLat) => {
-    //   this.newEntity.latitude = pos.getLat();
-    //   this.newEntity.longtitude = pos.getLng();
-    //   this._element.nativeElement.style.display = 'block';
-    //   this._element.nativeElement.ownerDocument.body.classList.add('modal-open');
-    // }, (cancel) => {
-    //   this._element.nativeElement.style.display = 'block';
-    //   this._element.nativeElement.ownerDocument.body.classList.add('modal-open');
-    // });
-  }
-
-
-  //#endregion
-
   //#region Interface implementation
 
-  isSubmitDisAllowed(): boolean {
-    return super.isSubmitDisAllowed(); // || this.newEntity.images.length === 0;
-    // return !this.isChanged() || !form.valid || (this.newEntity.images.length === 0);
+  isDataInvalid(): boolean {
+     return this.newEntity.timeNeeded === 0;
   }
 
   get entityName(): string {
@@ -147,6 +83,93 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     }
 
     return false;
+  }
+
+  //#endregion
+
+  //#region Public method
+
+  compareCityFn(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
+  }
+
+  isNameInValid(name: FormControl): boolean {
+    if (name && name.errors)
+      return name.invalid && name.errors.required;
+
+    return false;
+  }
+
+  isAddressInValid(address: FormControl): boolean {
+    if (address && address.errors)
+      return address.invalid && address.errors.required;
+
+    return false;
+  }
+
+  isCityInValid(city: FormControl): boolean {
+    if (city && city.errors)
+      return city.invalid && city.errors.required;
+
+    return false;
+  }
+
+  isCategoryInValid(category: FormControl): boolean {
+    if (category && category.errors)
+      return category.invalid &&  category.errors.required;
+
+    return false;
+  }
+
+  isRankInValid(rank: FormControl): boolean {
+    if (rank && rank.errors)
+      return rank.invalid && rank.errors.required;
+
+    if (rank.value <= 0)
+      return true;
+
+    return false;
+  }
+
+  isTimeNeededInValid(timeNeeded: FormControl): boolean {
+    if (timeNeeded && timeNeeded.errors)
+      return timeNeeded.invalid &&  timeNeeded.errors.required;
+
+      if (timeNeeded.value <= 0)
+      return true;
+
+    return false;
+  }
+
+  openMap() {
+    // this._modalService.create({
+    //   nzTitle: 'Modal Title',
+    //   nzContent: MapModalComponent,
+    //   nzComponentParams: {
+    //     minHeight: 500,
+    //     city: this.newEntity.city
+    //   },
+    //   nzFooter: null
+    // });
+
+    // const activeModal = this._modalService.open(MapModalComponent, { backdrop: false, size: 'lg', container: 'nb-layout' });
+    // activeModal.componentInstance.minHeight = 500;
+    // activeModal.componentInstance.city = this.newEntity.city;
+
+    // this._element.nativeElement.style.display = 'none';
+
+    // if (this.newEntity.latitude) {
+    //   activeModal.componentInstance.pointChoosed = new AMap.LngLat(this.newEntity.longtitude, this.newEntity.latitude);
+    // }
+    // activeModal.result.then((pos: AMap.LngLat) => {
+    //   this.newEntity.latitude = pos.getLat();
+    //   this.newEntity.longtitude = pos.getLng();
+    //   this._element.nativeElement.style.display = 'block';
+    //   this._element.nativeElement.ownerDocument.body.classList.add('modal-open');
+    // }, (cancel) => {
+    //   this._element.nativeElement.style.display = 'block';
+    //   this._element.nativeElement.ownerDocument.body.classList.add('modal-open');
+    // });
   }
 
   //#endregion

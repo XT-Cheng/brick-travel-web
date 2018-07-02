@@ -5,6 +5,8 @@ import { EntityService } from '@core/store/providers/entity.service';
 import { ErrorService } from '@core/store/providers/error.service';
 import { ObjectID } from 'bson';
 import { NzMessageService, NzModalRef, UploadFile } from 'ng-zorro-antd';
+import { LayoutDefaultComponent } from '../../layout/default/default.component';
+import { NgForm } from '@angular/forms';
 
 export enum EntityFormMode {
     create,
@@ -13,10 +15,11 @@ export enum EntityFormMode {
 
 export interface ComponentType {
     createEntity();
+    layoutComp: LayoutDefaultComponent;
 }
 
 export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
-    @ViewChild('form') protected _form;
+    @ViewChild('form') protected _form: NgForm;
 
     //#region Private member
 
@@ -71,7 +74,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#region Public methods
 
     public isSubmitDisAllowed(): boolean {
-        return !this.isChanged() || !this._form.valid;
+        return !this.isChanged() || this._form.invalid || this.isDataInvalid();
     }
 
     //#endregion
@@ -97,6 +100,8 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#region Public abstract methods
 
     public abstract isChanged(): boolean;
+
+    public abstract isDataInvalid(): boolean;
 
     //#endregion
 }

@@ -47,8 +47,8 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
     return '';
   }
 
-  isSubmitDisAllowed(): boolean {
-    return super.isSubmitDisAllowed() || this.newEntity.thumbnail === '';
+  isDataInvalid(): boolean {
+    return this.newEntity.thumbnail === '';
   }
 
   isChanged(): boolean {
@@ -63,7 +63,7 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
 
   isNameInValid(name: FormControl): boolean {
     if (name && name.errors)
-      return name.invalid && name.touched && name.errors.required;
+      return name.invalid && name.errors.required;
 
     return false;
   }

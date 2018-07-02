@@ -4,76 +4,8 @@
   </nb-card-header>
   <nb-card-body>
     <form #form="ngForm" class='vp-form' autocomplete="nope">
-      <nb-tabset>
-        <nb-tab tabTitle='General'>
-          <div class="form-group row">
-            <div class="col-6">
-              <label for="input-name">View Point Name</label>
-              <input #name='ngModel' type="text" id='input-name' placeholder="Name" class="form-control" [(ngModel)]="newEntity.name"
-                name='name' required btAutofocus [class.danger]="name.invalid && name.touched" />
-              <small style='margin-left: 0;' class="form-text error" *ngIf="name.invalid && name.touched && name?.errors?.required">
-                Name is required!
-              </small>
-            </div>
-            <div class="col-6">
-              <label for="input-category">Category</label>
-              <select #category='ngModel' required id='input-category' [compareWith]="compareCityFn" [(ngModel)]='newEntity.category'
-                name='category' class="form-control" [class.danger]="category.invalid">
-                <option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [ngValue]="category">{{category.name}}</option>
-              </select>
-              <small style='margin-left: 0;' class="form-text error" *ngIf="category.invalid && category?.errors?.required">
-                Category is required!
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="input-rank">Rank</label>
-            <bt-rate required #rank='ngModel' id='input-rank' class="form-control" [class.danger]="rank.invalid" max=5 [readonly]='false'
-              name='rank' [(ngModel)]="newEntity.rank">
-              <ng-template let-fill="fill">
-                <svg class="bt-icon-small" aria-hidden="true" *ngIf="fill === 0">
-                  <use xlink:href='#icon-empty-star'></use>
-                </svg>
-                <svg class="bt-icon-small" aria-hidden="true" *ngIf="fill === 50">
-                  <use xlink:href='#icon-half-star'></use>
-                </svg>
-                <svg class="bt-icon-small" aria-hidden="true" *ngIf="fill === 100">
-                  <use xlink:href='#icon-star'></use>
-                </svg>
-              </ng-template>
-            </bt-rate>
-            <small style='margin-left: 0;' class="form-text error" *ngIf="rank.invalid && rank?.errors?.required">
-              Address is required!
-            </small>
-          </div>
-          <div class="form-group">
-            <label for="input-timeNeeded">Time Needed</label>
-            <input #timeNeeded='ngModel' required type="text" id='input-timeNeeded' placeholder="Time Needed" class="form-control" [(ngModel)]="newEntity.timeNeeded"
-              name='timeNeeded' [class.danger]="timeNeeded.invalid" />
-            <small style='margin-left: 0;' class="form-text error" *ngIf="timeNeeded.invalid && timeNeeded?.errors?.required">
-              Time Needed is required!
-            </small>
-          </div>
-        </nb-tab>
+      <nb-tabset>           
         <nb-tab tabTitle='Location'>
-          <div class="form-group">
-            <label for="input-city">City</label>
-            <select #city='ngModel' required id='input-city' [compareWith]="compareCityFn" [(ngModel)]='newEntity.city' name='city'
-              class="form-control" [class.danger]="city.invalid">
-              <option *ngFor="let city of (_cityService.all$ | async)" [ngValue]="city">{{city.name}}</option>
-            </select>
-            <small style='margin-left: 0;' class="form-text error" *ngIf="city.invalid && city?.errors?.required">
-              City is required!
-            </small>
-          </div>
-          <div class="form-group">
-            <label for="input-address">Address</label>
-            <input #address='ngModel' type="text" id='input-address' placeholder="Address" class="form-control" [(ngModel)]="newEntity.address"
-              name='address' required [class.danger]="address.invalid && address.touched" />
-            <small style='margin-left: 0;' class="form-text error" *ngIf="address.invalid && address?.errors?.required">
-              Address is required!
-            </small>
-          </div>
           <div class="form-group row">
             <div class="col-4">
               <label for="input-latitude">Latitude</label>
@@ -180,6 +112,29 @@
           </nz-form-control>
         </nz-form-item>
     </nz-tab>
+    <nz-tab nzTitle="Location">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">City</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isCityInValid(city)?'error':'success'" [nzSpan]="19">
+          <nz-select #city='ngModel' required [(ngModel)]='newEntity.city' [compareWith]="compareCityFn"
+          name='city'>
+            <ng-container *ngIf='selectedCity === null'>
+              <nz-option *ngFor="let city of (_cityService.all$ | async)" [nzLabel]="city.name" [nzValue]="city"></nz-option>
+            </ng-container>
+            <ng-container *ngIf='selectedCity !== null'>
+              <nz-option [nzLabel]="selectedCity.name" [nzValue]="selectedCity"></nz-option>
+            </ng-container>
+          </nz-select>
+          <nz-form-explain *ngIf="isCityInValid(city)"> City is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Address</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isAddressInValid(address)?'error':'success'" [nzSpan]="19">
+          <input nz-input required [(ngModel)]="newEntity.address" name="address" #address='ngModel'>
+          <nz-form-explain *ngIf="isAddressInValid(address)"> Address is required! </nz-form-explain>
+        </nz-form-control>
+    </nz-form-item>
+    </nz-tab>
   </nz-tabset>
 </form>
-<!-- btAutofocus -->

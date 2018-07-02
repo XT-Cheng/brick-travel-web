@@ -12,6 +12,8 @@ import { combineLatest, map, takeUntil } from 'rxjs/operators';
 
 import { EntityListComponent } from '../../../entity.list.component';
 import { ViewPointFormComponent } from '../form/viewPoint.form.component';
+import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
+import { CityService } from '@core/store/providers/city.service';
 
 @Component({
   selector: 'bt-vp-list',
@@ -23,6 +25,7 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
   //#region Private members
 
   private cityId$: BehaviorSubject<string> = new BehaviorSubject('');
+  private _selectedCity: ICityBiz;
 
   //#endregion
 
@@ -34,6 +37,7 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
 
   //#region Constructor
   constructor(protected _route: ActivatedRoute, public _viewPointUIService: ViewPointUIService,
+    protected _cityService: CityService,
     protected _errorService: ErrorService,
     protected _searchService: SearchService, protected _modalService: NzModalService, public _viewPointService: ViewPointService,
     protected _messageService: NzMessageService) {
@@ -62,6 +66,9 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
       .subscribe((paramMap) => {
         this.cityId$.next(paramMap.get('city'));
       });
+
+    this.cityId$.pipe(takeUntil(this._destroyed$))
+      .subscribe((cityId) => this._selectedCity = this._cityService.byId(cityId));
   }
 
   protected get componentType(): any {
@@ -69,7 +76,11 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
   }
 
   protected get newEntity(): IViewPointBiz {
-    return newViewPoint();
+    const viewPoint =  newViewPoint();
+
+    if (this._selectedCity) viewPoint.city = this._selectedCity;
+
+    return viewPoint;
   }
 
   protected get entityDescription(): string {
@@ -85,6 +96,13 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
 
   delete(viewPoint: IViewPointBiz) {
     this.deleteEntity(viewPoint, viewPoint.name);
+  }
+
+  //#endregion
+
+  //#region Protected method
+  protected get entityCompParas(): any {
+    return {selectedCity: this._selectedCity};
   }
 
   //#endregion
