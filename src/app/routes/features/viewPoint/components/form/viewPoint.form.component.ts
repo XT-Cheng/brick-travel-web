@@ -1,4 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
 import { IViewPointBiz } from '@core/store/bizModel/model/viewPoint.biz.model';
 import { IViewPoint } from '@core/store/entity/model/viewPoint.model';
 import { CityService } from '@core/store/providers/city.service';
@@ -6,13 +8,11 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { ViewPointService } from '@core/store/providers/viewPoint.service';
 import { ViewPointUIService } from '@core/store/providers/viewPoint.ui.service';
 import { ViewPointCategoryService } from '@core/store/providers/viewPointCategory.service';
+import { WEBAPI_HOST } from '@core/utils/constants';
 import { NzMessageService, NzModalRef, NzModalService, UploadFile } from 'ng-zorro-antd';
 
 import { EntityFormComponent, EntityFormMode } from '../../../entity.form.component';
 import { MapModalComponent } from '../mapModal.component';
-import { FormControl } from '@angular/forms';
-import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
-import { WEBAPI_HOST } from '@core/utils/constants';
 
 @Component({
   selector: 'bt-vp-form',
@@ -29,6 +29,8 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   protected selectedCity: ICityBiz;
 
   uploadUrl = `${WEBAPI_HOST}/fileUpload`;
+
+  imagesFileList: UploadFile[];
 
   //#endregion
 
@@ -47,6 +49,8 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
     this.addFile('thumbnail');
     this.addFile('images');
+
+    this.imagesFileList = this.fileList('images');
   }
 
   //#endregion
@@ -54,7 +58,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   //#region Interface implementation
 
   isDataInvalid(): boolean {
-     return this.newEntity.timeNeeded === 0;
+    return this.newEntity.timeNeeded === 0;
   }
 
   get entityName(): string {
@@ -105,13 +109,19 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   beforeImagesUpload = (file: any): boolean => {
     this.getBase64(file, (img: string) => {
-      setTimeout(() => {
-        this.addFile('images', file);
-        file.status = 'done';
-        this.newEntity.images.push(img);
-      });
+      this.addFile('images', file);
+      file.status = 'done';
+      file.thumbUrl = img;
+      this.newEntity.images.push(img);
+      this.imagesFileList = this.fileList('images').slice();
     });
     return false;
+  }
+
+  beforeImagesRemove = (file: any): boolean => {
+    this.removeFile('images', file.uid);
+    this.newEntity.images.filter((img) => img !== file.uid);
+    return true;
   }
 
   hasCity(): boolean {
@@ -130,11 +140,11 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   }
 
   isThumbnailInValid(): boolean {
-    return !this.newEntity.thumbnail &&  this.files.get('thumbnail').length === 0;
+    return !this.newEntity.thumbnail && this.fileList('thumbnail').length === 0;
   }
 
   isImageInValid(): boolean {
-    return this.newEntity.images.length === 0 && this.files.get('images').length === 0;
+    return this.newEntity.images.length === 0 && this.fileList('images').length === 0;
   }
 
   isCityInValid(city: FormControl): boolean {
@@ -169,7 +179,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     const mapModal = this._modalService.create({
       nzTitle: '',
       nzContent: MapModalComponent,
-      nzBodyStyle: {padding: 0},
+      nzBodyStyle: { padding: 0 },
       nzMask: false,
       nzComponentParams: componentParams,
       nzFooter: null

@@ -56,48 +56,45 @@
 <form #form="ngForm" nz-form>
   <nz-tabset>
     <nz-tab nzTitle="General">
-        <nz-form-item>
-            <nz-form-label nzRequired [nzSpan]="5">Name</nz-form-label>
-            <nz-form-control [nzValidateStatus]="isRequiredInValid(name)?'error':'success'" [nzSpan]="19">
-              <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
-              <nz-form-explain *ngIf="isRequiredInValid(name)"> Name is required! </nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired [nzSpan]="5">Category</nz-form-label>
-            <nz-form-control [nzValidateStatus]="isRequiredInValid(category)?'error':'success'" [nzSpan]="19">
-              <nz-select #category='ngModel' required [(ngModel)]='newEntity.category'
-                name='category'>
-                <nz-option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [nzLabel]="category.name" [nzValue]="category"></nz-option>
-              </nz-select>
-              <nz-form-explain *ngIf="isRequiredInValid(category)"> Category is required! </nz-form-explain>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzRequired [nzSpan]="5">Rank</nz-form-label>
-          <nz-form-control [nzValidateStatus]="isNumberInValid(rank)?'error':'success'" [nzSpan]="19">
-            <nz-rate #rank='ngModel' required [(ngModel)]='newEntity.rank'
-              name='rank'>
-            </nz-rate>
-            <nz-form-explain *ngIf="isNumberInValid(rank)"> Rank is required! </nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzRequired [nzSpan]="5">Time</nz-form-label>
-          <nz-form-control [nzValidateStatus]="isNumberInValid(timeNeeded)?'error':'success'" [nzSpan]="19">
-            <nz-input-number required [nzAutoFocus]='true' [nzStep]="0.1" [nzPlaceHolder]='"Time"' #timeNeeded='ngModel' required [(ngModel)]='newEntity.timeNeeded'
-              name='timeNeeded'>
-            </nz-input-number>
-            <nz-form-explain *ngIf="isNumberInValid(timeNeeded)"> Time Needed is required! </nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Name</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isRequiredInValid(name)?'error':'success'" [nzSpan]="19">
+          <input nz-input btAutofocus required [(ngModel)]="newEntity.name" name="name" #name='ngModel'>
+          <nz-form-explain *ngIf="isRequiredInValid(name)"> Name is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Category</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isRequiredInValid(category)?'error':'success'" [nzSpan]="19">
+          <nz-select #category='ngModel' required [(ngModel)]='newEntity.category' name='category'>
+            <nz-option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [nzLabel]="category.name" [nzValue]="category"></nz-option>
+          </nz-select>
+          <nz-form-explain *ngIf="isRequiredInValid(category)"> Category is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Rank</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isNumberInValid(rank)?'error':'success'" [nzSpan]="19">
+          <nz-rate #rank='ngModel' required [(ngModel)]='newEntity.rank' name='rank'>
+          </nz-rate>
+          <nz-form-explain *ngIf="isNumberInValid(rank)"> Rank is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Time</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isNumberInValid(timeNeeded)?'error':'success'" [nzSpan]="19">
+          <nz-input-number required [nzAutoFocus]='true' [nzStep]="0.1" [nzPlaceHolder]='"Time"' #timeNeeded='ngModel' required [(ngModel)]='newEntity.timeNeeded'
+            name='timeNeeded'>
+          </nz-input-number>
+          <nz-form-explain *ngIf="isNumberInValid(timeNeeded)"> Time Needed is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
     </nz-tab>
     <nz-tab nzTitle="Location">
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">City</nz-form-label>
         <nz-form-control [nzValidateStatus]="isCityInValid(city)?'error':'success'" [nzSpan]="19">
-          <nz-select #city='ngModel' required [(ngModel)]='newEntity.city' [compareWith]="compareCityFn"
-          name='city'>
+          <nz-select #city='ngModel' required [(ngModel)]='newEntity.city' [compareWith]="compareCityFn" name='city'>
             <ng-container *ngIf='selectedCity === null'>
               <nz-option *ngFor="let city of (_cityService.all$ | async)" [nzLabel]="city.name" [nzValue]="city"></nz-option>
             </ng-container>
@@ -132,42 +129,36 @@
       <nz-form-item>
         <nz-form-control [nzOffset]='5'>
           <button nz-button (click)='openMap()' [disabled]='!hasCity()'>
-              <i class="anticon anticon-environment"></i>
+            <i class="anticon anticon-environment"></i>
           </button>
         </nz-form-control>
       </nz-form-item>
     </nz-tab>
     <nz-tab nzTitle='Images'>
       <nz-form-item>
-          <nz-form-label nzRequired [nzSpan]="5">Thumbnail</nz-form-label>
-            <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
-              <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeThumbnailUpload"
-                [nzShowUploadList]="false">
-              <ng-container *ngIf="!newEntity.thumbnail">
-                  <i class="anticon anticon-plus"></i>
-                  <div class="ant-upload-text">Upload</div>
-              </ng-container>
-              <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail">
-            </nz-upload>
-            <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-            <nz-form-label nzRequired [nzSpan]="5">Images</nz-form-label>
-              <nz-form-control [nzValidateStatus]="isImageInValid()?'error':'success'" [nzSpan]="19">
-                  <nz-upload
-                  nzAction="uploadUrl"
-                  nzListType="picture-card"
-                  [nzFileList]="fileList('images')"
-                  (nzFileListChange)="setFileList('images',$event)"
-                  [nzShowButton]="fileList('images').length < 3"
-                  [nzBeforeUpload]="beforeImagesUpload">
-                    <i class="anticon anticon-plus"></i>
-                    <div class="ant-upload-text">Upload</div>
-                </nz-upload>
-              <nz-form-explain *ngIf="isImageInValid()"> Image is required! </nz-form-explain>
-            </nz-form-control>
-          </nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Thumbnail</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
+          <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]="false">
+            <ng-container *ngIf="!newEntity.thumbnail">
+              <i class="anticon anticon-plus"></i>
+              <div class="ant-upload-text">Upload</div>
+            </ng-container>
+            <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail">
+          </nz-upload>
+          <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="5">Images</nz-form-label>
+        <nz-form-control [nzValidateStatus]="isImageInValid()?'error':'success'" [nzSpan]="19">
+          <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="imagesFileList" [nzShowButton]="fileList('images').length < 3"
+            [nzBeforeUpload]="beforeImagesUpload" [nzRemove]="beforeImagesRemove">
+            <i class="anticon anticon-plus"></i>
+            <div class="ant-upload-text">Upload</div>
+          </nz-upload>
+          <nz-form-explain *ngIf="isImageInValid()"> Image is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
     </nz-tab>
   </nz-tabset>
 </form>

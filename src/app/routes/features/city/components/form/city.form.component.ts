@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ICityBiz } from '@core/store/bizModel/model/city.biz.model';
 import { ICity } from '@core/store/entity/model/city.model';
 import { CityService } from '@core/store/providers/city.service';
@@ -7,7 +8,6 @@ import { WEBAPI_HOST } from '@core/utils/constants';
 import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
 
 import { EntityFormComponent } from '../../../entity.form.component';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'bt-city-form',
@@ -69,7 +69,7 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   }
 
   isThumbnailInValid(): boolean {
-    return !this.newEntity.thumbnail && (this.files.has('thumbnail') ? this.files.get('thumbnail').length === 0 : true);
+    return !this.newEntity.thumbnail && this.fileList('thumbnail').length === 0;
   }
 
   beforeUpload = (file: any): boolean => {

@@ -1,12 +1,13 @@
 import { ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { IBiz } from '@core/store/bizModel/biz.model';
 import { IEntity } from '@core/store/entity/entity.model';
 import { EntityService } from '@core/store/providers/entity.service';
 import { ErrorService } from '@core/store/providers/error.service';
 import { ObjectID } from 'bson';
 import { NzMessageService, NzModalRef, UploadFile } from 'ng-zorro-antd';
+
 import { LayoutDefaultComponent } from '../../layout/default/default.component';
-import { NgForm } from '@angular/forms';
 
 export enum EntityFormMode {
     create,
@@ -25,7 +26,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     private _newEntity: U;
     private _originalEntity: U;
-    private _filesMap: Map<string, any[]> = new Map<string, any[]>();
+    private _filesMap: Map<string, Map<string, any>> = new Map<string, Map<string, any>>();
 
     //#endregion
 
@@ -40,8 +41,20 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
         return this._newEntity;
     }
 
-    get files(): Map<string, UploadFile[]> {
-        return this._filesMap;
+    get filesToUpload(): Map<string, UploadFile[]> {
+        const result: Map<string, UploadFile[]> = new Map<string, UploadFile[]>();
+
+        this._filesMap.forEach((value, key) => {
+            value.forEach((file) => {
+                if (result.has(key)) {
+                    result.get(key).push(file);
+                } else {
+                    result.set(key, [file]);
+                }
+            });
+        });
+
+        return result;
     }
 
     abstract get entityName(): string;
@@ -80,23 +93,36 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Protected methods
-    protected fileList(key: string): UploadFile[] {
-        return this._filesMap.get(key);
-    }
+    protected fileList(key: string): any[] {
+        const result: any[] = [];
 
-    protected setFileList(key: string, files: UploadFile[]) {
-        this._filesMap.set(key, files);
+        if (this._filesMap.has(key)) {
+            const files = this._filesMap.get(key);
+            files.forEach((file) => {
+                result.push(file);
+            });
+        }
+
+        return result;
     }
 
     protected addFile(key: string, file?: UploadFile) {
         if (file) {
             if (this._filesMap.has(key)) {
-                this._filesMap.get(key).push(file);
+                this._filesMap.get(key).set(file.uid, file);
             } else {
-                this._filesMap.set(key, [file]);
+                const map = new Map<string, UploadFile>();
+                map.set(file.uid, file);
+                this._filesMap.set(key, map);
             }
         } else {
-            this._filesMap.set(key, []);
+            this._filesMap.set(key, new Map<string, UploadFile>());
+        }
+    }
+
+    protected removeFile(key: string, uid: string) {
+        if (this._filesMap.has(key)) {
+            this._filesMap.get(key).delete(uid);
         }
     }
 

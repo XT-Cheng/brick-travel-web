@@ -7,12 +7,12 @@ import { ErrorService } from '@core/store/providers/error.service';
 import { SearchService } from '@core/store/providers/search.service';
 import { UIService } from '@core/store/providers/ui.service';
 import { ModalComponent } from '@shared/components/modal/modal.component';
-import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalRef, NzModalService } from 'ng-zorro-antd';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ComponentType, EntityFormComponent, EntityFormMode } from './entity.form.component';
 import { LayoutDefaultComponent } from '../../layout/default/default.component';
+import { ComponentType, EntityFormComponent, EntityFormMode } from './entity.form.component';
 
 export abstract class EntityListComponent<T extends IEntity, U extends IBiz> implements ComponentType,
     OnInit, OnDestroy {
@@ -20,7 +20,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     private _layoutCmp: LayoutDefaultComponent;
 
     private _changeAction = (componentInstance: EntityFormComponent<T, U>) => {
-        this._service.change(componentInstance.newEntity, componentInstance.files).subscribe(
+        this._service.change(componentInstance.newEntity, componentInstance.filesToUpload).subscribe(
             (_) => {
                 this._modelRef.close();
                 this._messageService.success(`${componentInstance.entityName} changed`);
@@ -30,7 +30,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
             });
     }
 
-    private _deleteAction = (entity: U, name: string ) => (componentInstance: ModalComponent) => {
+    private _deleteAction = (entity: U, name: string) => (componentInstance: ModalComponent) => {
         this._service.remove(entity).subscribe(
             (_) => {
                 this._modelRef.close();
@@ -42,7 +42,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     }
 
     private _createAction = (componentInstance: EntityFormComponent<T, U>) => {
-        this._service.add(componentInstance.newEntity, componentInstance.files).subscribe(
+        this._service.add(componentInstance.newEntity, componentInstance.filesToUpload).subscribe(
             (_) => {
                 this._modelRef.close();
                 this._messageService.success(`${componentInstance.entityName} created`);
@@ -132,7 +132,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 originalEntity: this.newEntity,
                 ...this.entityCompParas
             },
-            nzFooter: [{...this._oKBtnOption, ...{onClick: this._createAction}}, this._cancelBtnOption]
+            nzFooter: [{ ...this._oKBtnOption, ...{ onClick: this._createAction } }, this._cancelBtnOption]
         });
     }
 
@@ -161,7 +161,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
             },
-            nzFooter: [{...this._oKBtnOption, ...{onClick: this._changeAction}}, this._cancelBtnOption]
+            nzFooter: [{ ...this._oKBtnOption, ...{ onClick: this._changeAction } }, this._cancelBtnOption]
         });
     }
 
@@ -173,11 +173,12 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
                 modalHeader: `Confrim`,
                 modalContent: `Delete ${name}, are you sure?`
             },
-            nzFooter: [{...this._oKBtnOption, ...{disabled: () => false, onClick: this._deleteAction(entity, name)}},
-                {label: 'Cancel', onClick: () => {
-                        this._modelRef.close();
-                    }
-                }]
+            nzFooter: [{ ...this._oKBtnOption, ...{ disabled: () => false, onClick: this._deleteAction(entity, name) } },
+            {
+                label: 'Cancel', onClick: () => {
+                    this._modelRef.close();
+                }
+            }]
         });
     }
     //#endregion
