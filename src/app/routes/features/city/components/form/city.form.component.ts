@@ -69,7 +69,7 @@ export class CityFormComponent extends EntityFormComponent<ICity, ICityBiz> {
   }
 
   isThumbnailInValid(): boolean {
-    return !this.newEntity.thumbnail && this.files.size === 0;
+    return !this.newEntity.thumbnail && (this.files.has('thumbnail') ? this.files.get('thumbnail').length === 0 : true);
   }
 
   beforeUpload = (file: any): boolean => {

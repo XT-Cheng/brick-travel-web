@@ -28,9 +28,12 @@
             ],
             "styles": [
               "node_modules/simple-line-icons/css/simple-line-icons.css",
-              "src/styles.less"
+              "src/styles.less",
+              "src/app/shared/components/styles/iconfont.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/app/shared/components/styles/iconfont.js"
+            ]
           },
           "configurations": {
             "production": {

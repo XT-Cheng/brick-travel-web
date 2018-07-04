@@ -25,7 +25,7 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
 
     private _newEntity: U;
     private _originalEntity: U;
-    private _filesMap: Map<string, UploadFile[]> = new Map<string, UploadFile[]>();
+    private _filesMap: Map<string, any[]> = new Map<string, any[]>();
 
     //#endregion
 
@@ -80,12 +80,23 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Protected methods
+    protected fileList(key: string): UploadFile[] {
+        return this._filesMap.get(key);
+    }
 
-    protected addFile(key: string, file: UploadFile) {
-        if (this._filesMap.has(key)) {
-            this._filesMap.get(key).push(file);
+    protected setFileList(key: string, files: UploadFile[]) {
+        this._filesMap.set(key, files);
+    }
+
+    protected addFile(key: string, file?: UploadFile) {
+        if (file) {
+            if (this._filesMap.has(key)) {
+                this._filesMap.get(key).push(file);
+            } else {
+                this._filesMap.set(key, [file]);
+            }
         } else {
-            this._filesMap.set(key, [file]);
+            this._filesMap.set(key, []);
         }
     }
 
