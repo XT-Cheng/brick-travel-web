@@ -31,6 +31,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   uploadUrl = `${WEBAPI_HOST}/fileUpload`;
 
   imagesFileList: UploadFile[];
+  thumbnailFileList: UploadFile[];
 
   //#endregion
 
@@ -51,6 +52,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     this.addFile('images');
 
     this.imagesFileList = this.fileList('images');
+    this.thumbnailFileList = this.fileList('thumbnail');
   }
 
   //#endregion
@@ -58,7 +60,8 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
   //#region Interface implementation
 
   isDataInvalid(): boolean {
-    return this.newEntity.timeNeeded === 0;
+    return this.newEntity.timeNeeded === 0 || this.newEntity.thumbnail === '' ||
+      this.newEntity.images.length === 0;
   }
 
   get entityName(): string {
@@ -78,7 +81,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
       this.newEntity.latitude === this.originalEntity.latitude &&
       this.newEntity.longtitude === this.originalEntity.longtitude &&
       this.newEntity.rank === this.originalEntity.rank &&
-      this.newEntity.tags === this.originalEntity.tags &&
+      this.newEntity.tags.length === this.originalEntity.tags.length &&
       this.newEntity.timeNeeded === this.originalEntity.timeNeeded &&
       this.newEntity.tips === this.originalEntity.tips &&
       this.newEntity.thumbnail === this.originalEntity.thumbnail &&
@@ -92,7 +95,37 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
       }
     }
 
+    for (let i = 0; i < this.newEntity.tags.length; i++) {
+      if (this.newEntity.tags[i] !== this.originalEntity.tags[i]) {
+        return true;
+      }
+    }
+
     return false;
+  }
+
+  //#endregion
+
+  //#region Protected method
+
+  protected onOriginalEntitySet() {
+    this.originalEntity.images.forEach((img) => {
+      this.imagesFileList.push({
+        uid: img,
+        size: 0,
+        name: img,
+        type: '',
+        thumbUrl: img
+      });
+    });
+
+    this.thumbnailFileList.push({
+        uid: this.originalEntity.thumbnail,
+        size: 0,
+        name: this.originalEntity.thumbnail,
+        type: '',
+        thumbUrl: this.originalEntity.thumbnail
+    });
   }
 
   //#endregion
@@ -102,7 +135,9 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     this.getBase64(file, (img: string) => {
       this.addFile('thumbnail', file);
       file.status = 'done';
+      file.thumbUrl = img;
       this.newEntity.thumbnail = img;
+      this.thumbnailFileList = this.fileList('thumbnail').slice();
     });
     return false;
   }
@@ -120,7 +155,15 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   beforeImagesRemove = (file: any): boolean => {
     this.removeFile('images', file.uid);
-    this.newEntity.images.filter((img) => img !== file.uid);
+    this.newEntity.images = this.newEntity.images.filter((img) => img !== file.uid);
+    this.imagesFileList = this.fileList('images').slice();
+    return true;
+  }
+
+  beforeThumbnailRemove = (file: any): boolean => {
+    this.removeFile('thumbnail', file.uid);
+    this.newEntity.thumbnail = '';
+    this.thumbnailFileList = this.fileList('thumbnail').slice();
     return true;
   }
 
@@ -128,7 +171,7 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
     return !!this.newEntity.city;
   }
 
-  compareCityFn(c1: any, c2: any): boolean {
+  compareEntityFn(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 

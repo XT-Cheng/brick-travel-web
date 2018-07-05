@@ -1,14 +1,15 @@
 <div class="row">
-  <!-- <nb-card *ngFor='let vp of (viewPointsByCity$ | async)' class='vp-card' >
-    <nb-card-body>
+    <nz-card nz-col [nzActions]="[actionEdit,actionDelete]" [nzSpan]="6" *ngFor='let vp of (viewPointsByCity$ | async)'
+    class='vp-card' [nzCover]='coverTemplate'>
+    <nz-card-meta [nzTitle]="vp.name"></nz-card-meta>
+    <ng-template #coverTemplate>
       <img [src]="vp.thumbnail" />
-      <div class="card-title">{{vp.name}}</div>
-    </nb-card-body>
-    <nb-card-footer>
-      <nb-actions [fullWidth]='true'>
-        <nb-action icon='nb-compose' (click)='edit(vp)'></nb-action>
-        <nb-action icon='nb-close' (click)='delete(vp)'></nb-action>
-      </nb-actions>
-    </nb-card-footer>
-  </nb-card> -->
+    </ng-template>
+    <ng-template #actionEdit>
+      <i class="anticon anticon-edit" (click)='edit(vp)'></i>
+    </ng-template>
+    <ng-template #actionDelete>
+      <i class="anticon anticon-delete" (click)='delete(vp)'></i>
+    </ng-template>
+  </nz-card>
 </div>

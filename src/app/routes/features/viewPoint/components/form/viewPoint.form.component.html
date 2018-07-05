@@ -66,7 +66,7 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Category</nz-form-label>
         <nz-form-control [nzValidateStatus]="isRequiredInValid(category)?'error':'success'" [nzSpan]="19">
-          <nz-select #category='ngModel' required [(ngModel)]='newEntity.category' name='category'>
+          <nz-select #category='ngModel' required [(ngModel)]='newEntity.category' [compareWith]="compareEntityFn" name='category'>
             <nz-option *ngFor="let category of (_viewPointCategoryService.all$ | async)" [nzLabel]="category.name" [nzValue]="category"></nz-option>
           </nz-select>
           <nz-form-explain *ngIf="isRequiredInValid(category)"> Category is required! </nz-form-explain>
@@ -94,12 +94,12 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">City</nz-form-label>
         <nz-form-control [nzValidateStatus]="isCityInValid(city)?'error':'success'" [nzSpan]="19">
-          <nz-select #city='ngModel' required [(ngModel)]='newEntity.city' [compareWith]="compareCityFn" name='city'>
-            <ng-container *ngIf='selectedCity === null'>
+          <nz-select #city='ngModel' required [(ngModel)]='newEntity.city' [compareWith]="compareEntityFn" name='city'>
+            <ng-container *ngIf='newEntity.city === null'>
               <nz-option *ngFor="let city of (_cityService.all$ | async)" [nzLabel]="city.name" [nzValue]="city"></nz-option>
             </ng-container>
-            <ng-container *ngIf='selectedCity !== null'>
-              <nz-option [nzLabel]="selectedCity.name" [nzValue]="selectedCity"></nz-option>
+            <ng-container *ngIf='newEntity.city !== null'>
+              <nz-option [nzLabel]="newEntity.city.name" [nzValue]="newEntity.city"></nz-option>
             </ng-container>
           </nz-select>
           <nz-form-explain *ngIf="isCityInValid(city)"> City is required! </nz-form-explain>
@@ -138,6 +138,14 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Thumbnail</nz-form-label>
         <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
+            <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="thumbnailFileList" [nzShowButton]="thumbnailFileList.length < 1"
+              [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]='{showRemoveIcon: true}' [nzRemove]="beforeThumbnailRemove">
+              <i class="anticon anticon-plus"></i>
+              <div class="ant-upload-text">Upload</div>
+            </nz-upload>
+            <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
+          </nz-form-control>
+        <!-- <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
           <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]="false">
             <ng-container *ngIf="!newEntity.thumbnail">
               <i class="anticon anticon-plus"></i>
@@ -146,13 +154,13 @@
             <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail">
           </nz-upload>
           <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
-        </nz-form-control>
+        </nz-form-control> -->
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Images</nz-form-label>
         <nz-form-control [nzValidateStatus]="isImageInValid()?'error':'success'" [nzSpan]="19">
-          <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="imagesFileList" [nzShowButton]="fileList('images').length < 3"
-            [nzBeforeUpload]="beforeImagesUpload" [nzRemove]="beforeImagesRemove">
+          <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="imagesFileList" [nzShowButton]="imagesFileList.length < 3"
+            [nzBeforeUpload]="beforeImagesUpload" [nzShowUploadList]='{showRemoveIcon: true}' [nzRemove]="beforeImagesRemove">
             <i class="anticon anticon-plus"></i>
             <div class="ant-upload-text">Upload</div>
           </nz-upload>

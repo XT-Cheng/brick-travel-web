@@ -68,7 +68,9 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
             entity.id = new ObjectID().toHexString();
         }
         this._originalEntity = entity;
-        this._newEntity = Object.assign({}, entity);
+        this._newEntity = this.copyEntity(entity);
+
+        this.onOriginalEntitySet();
     }
 
     protected get originalEntity(): U {
@@ -93,6 +95,15 @@ export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
     //#endregion
 
     //#region Protected methods
+
+    protected copyEntity(originalEntity: U): U {
+        return JSON.parse(JSON.stringify(originalEntity));
+    }
+
+    protected onOriginalEntitySet() {
+
+    }
+
     protected fileList(key: string): any[] {
         const result: any[] = [];
 

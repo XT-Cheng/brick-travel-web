@@ -24,8 +24,14 @@ export class ViewPointService extends EntityService<IViewPoint, IViewPointBiz> {
     //#region Protected methods
 
     protected beforeSend(bizModel: IViewPointBiz) {
+        const thumbnail = (bizModel.thumbnail.startsWith(`data:image`)) ? `` : bizModel.thumbnail;
+        const images = bizModel.images.filter((img) => !img.startsWith(`data:image`));
+
         return Object.assign({}, bizModel, {
-            city: bizModel.city.id
+            city: bizModel.city.id,
+            category: bizModel.category.id,
+            thumbnail: thumbnail,
+            images: images
         });
     }
 
