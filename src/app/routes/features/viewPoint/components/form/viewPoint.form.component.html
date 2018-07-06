@@ -138,13 +138,13 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Thumbnail</nz-form-label>
         <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
-            <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="thumbnailFileList" [nzShowButton]="thumbnailFileList.length < 1"
-              [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]='{showRemoveIcon: true}' [nzRemove]="beforeThumbnailRemove">
-              <i class="anticon anticon-plus"></i>
-              <div class="ant-upload-text">Upload</div>
-            </nz-upload>
-            <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
-          </nz-form-control>
+          <nz-upload nzAction="uploadUrl" nzListType="picture-card" [nzFileList]="thumbnailFileList" [nzShowButton]="thumbnailFileList.length < 1"
+            [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]='{showRemoveIcon: true}' [nzRemove]="beforeThumbnailRemove">
+            <i class="anticon anticon-plus"></i>
+            <div class="ant-upload-text">Upload</div>
+          </nz-upload>
+          <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
+        </nz-form-control>
         <!-- <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
           <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]="false">
             <ng-container *ngIf="!newEntity.thumbnail">

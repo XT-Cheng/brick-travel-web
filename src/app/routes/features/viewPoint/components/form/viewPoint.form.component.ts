@@ -110,22 +110,27 @@ export class ViewPointFormComponent extends EntityFormComponent<IViewPoint, IVie
 
   protected onOriginalEntitySet() {
     this.originalEntity.images.forEach((img) => {
-      this.imagesFileList.push({
+      const image = {
         uid: img,
         size: 0,
         name: img,
         type: '',
         thumbUrl: img
-      });
+      };
+      this.imagesFileList.push(image);
+      this.addFile('images', image);
     });
 
-    this.thumbnailFileList.push({
-        uid: this.originalEntity.thumbnail,
-        size: 0,
-        name: this.originalEntity.thumbnail,
-        type: '',
-        thumbUrl: this.originalEntity.thumbnail
-    });
+    const thumbnail = {
+      uid: this.originalEntity.thumbnail,
+      size: 0,
+      name: this.originalEntity.thumbnail,
+      type: '',
+      thumbUrl: this.originalEntity.thumbnail
+    };
+
+    this.thumbnailFileList.push(thumbnail);
+    this.addFile('thumbnail', thumbnail);
   }
 
   //#endregion

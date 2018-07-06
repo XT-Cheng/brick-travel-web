@@ -13,6 +13,7 @@ import {
     mapTo,
     mergeMap,
     race,
+    skip,
     startWith,
     switchMap,
     take,
@@ -357,6 +358,7 @@ export abstract class EntityService<T extends IEntity, U extends IBiz> extends F
             this._store.dispatch(this.updateAction(bizModel.id, bizModel, files, dirtyMode, actionId));
 
             return this.getById(bizModel.id).pipe(
+                skip(1),
                 race(this._errorService.getActionError$(actionId).pipe(
                     map((err) => {
                         throw err;
