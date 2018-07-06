@@ -5,33 +5,6 @@
   <nb-card-body>
     <form #form="ngForm" class='vp-form' autocomplete="nope">
       <nb-tabset>           
-        <nb-tab tabTitle='Images'>
-          <div class="form-group">
-            <label for="input-thumnail">View Point Thumbnail</label>
-            <div btFileDrop id='input-thumnail' [multiple]='false' [ngClass]="{'nv-file-over': hasThumbnailDropZoneOver}" (fileOver)="thumbnailFileOver($event)"
-              (onFileDrop)="thumbnailFileDropped($event)" name='thumbnail' [uploader]="thumbnailUploader" class="my-drop-zone"
-              [class.danger]="!hasThumbnailFile()">
-              <div style='margin-left: 10px;' *ngIf='!hasThumbnailFile()'>Drop Thumbnail File</div>
-              <img *ngIf='hasThumbnailFile()' [src]='newEntity.thumbnail' />
-            </div>
-            <small style='margin-left: 0;margin-bottom: 20px;' class="form-text error" *ngIf="!hasThumbnailFile()">
-              Thumbnail is required!
-            </small>
-          </div>
-          <div class="form-group">
-            <label for="input-images">View Point Images</label>
-            <div btFileDrop id='input-images' [multiple]='true' [ngClass]="{'nv-file-over': hasImagesDropZoneOver}" (fileOver)="imageFileOver($event)"
-              (onFileDrop)="imageFileDropped($event)" name='images' [uploader]="imagesUploader" class="my-drop-zone" [class.danger]="!hasImageFiles()">
-              <div style='margin-left: 10px;' *ngIf='!hasImageFiles()'>Drop Image Files</div>
-              <ng-container *ngIf='hasImageFiles()'>
-                <img *ngFor='let image of newEntity.images' [src]='image' [nbContextMenu]="getMenuItem(image)" />
-              </ng-container>
-            </div>
-            <small style='margin-left: 0;margin-bottom: 20px;' class="form-text error" *ngIf="!hasImageFiles()">
-              Image is required!
-            </small>
-          </div>
-        </nb-tab>
         <nb-tab tabTitle='Others'>
           <div class="form-group">
             <label for="input-tips">Tips</label>
@@ -115,18 +88,18 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Latitude</nz-form-label>
         <nz-form-control [nzValidateStatus]="isRequiredInValid(latitude)?'error':'success'" [nzSpan]="19">
-          <input nz-input required [(ngModel)]="newEntity.latitude" name="latitude" #latitude='ngModel'>
+          <input nz-input required disabled [(ngModel)]="newEntity.latitude" name="latitude" #latitude='ngModel'>
           <nz-form-explain *ngIf="isRequiredInValid(latitude)"> Latitude is required! </nz-form-explain>
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Longtitude</nz-form-label>
         <nz-form-control [nzValidateStatus]="isRequiredInValid(longtitude)?'error':'success'" [nzSpan]="19">
-          <input nz-input required [(ngModel)]="newEntity.longtitude" name="longtitude" #longtitude='ngModel'>
+          <input nz-input required disabled [(ngModel)]="newEntity.longtitude" name="longtitude" #longtitude='ngModel'>
           <nz-form-explain *ngIf="isRequiredInValid(longtitude)"> Longtitude is required! </nz-form-explain>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
+      <nz-form-item style="margin-bottom: 0px;">
         <nz-form-control [nzOffset]='5'>
           <button nz-button (click)='openMap()' [disabled]='!hasCity()'>
             <i class="anticon anticon-environment"></i>
@@ -145,16 +118,6 @@
           </nz-upload>
           <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
         </nz-form-control>
-        <!-- <nz-form-control [nzValidateStatus]="isThumbnailInValid()?'error':'success'" [nzSpan]="19">
-          <nz-upload [nzAction]="uploadUrl" nzListType="picture-card" [nzBeforeUpload]="beforeThumbnailUpload" [nzShowUploadList]="false">
-            <ng-container *ngIf="!newEntity.thumbnail">
-              <i class="anticon anticon-plus"></i>
-              <div class="ant-upload-text">Upload</div>
-            </ng-container>
-            <img *ngIf="newEntity.thumbnail" [src]="newEntity.thumbnail">
-          </nz-upload>
-          <nz-form-explain *ngIf="isThumbnailInValid()"> Thumbnail is required! </nz-form-explain>
-        </nz-form-control> -->
       </nz-form-item>
       <nz-form-item>
         <nz-form-label nzRequired [nzSpan]="5">Images</nz-form-label>
@@ -165,6 +128,22 @@
             <div class="ant-upload-text">Upload</div>
           </nz-upload>
           <nz-form-explain *ngIf="isImageInValid()"> Image is required! </nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </nz-tab>
+    <nz-tab nzTitle='Others'>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">Tips</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <textarea nz-input [(ngModel)]="newEntity.tips" name="tips" placeholder="Tips" [nzAutosize]="{ minRows: 2, maxRows: 6 }">
+          </textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSpan]="5">Description</nz-form-label>
+        <nz-form-control [nzSpan]="19">
+          <textarea nz-input [(ngModel)]="newEntity.description" name="description" placeholder="Description" [nzAutosize]="{ minRows: 4, maxRows: 6 }">
+          </textarea>
         </nz-form-control>
       </nz-form-item>
     </nz-tab>

@@ -20,7 +20,12 @@ export interface ComponentType {
 }
 
 export abstract class EntityFormComponent<T extends IEntity, U extends IBiz> {
+
+    //#region Protected member
+
     @ViewChild('form') protected _form: NgForm;
+
+    //#endregion
 
     //#region Private member
 

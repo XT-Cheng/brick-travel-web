@@ -51,16 +51,12 @@ export class TravelAgendaListComponent extends EntityListComponent<ITravelAgenda
     return 'Travel Agenda';
   }
 
+  protected get entityName(): string {
+    return 'name';
+  }
   //#endregion
 
   //#region Public method
-  edit(travelAgenda: ITravelAgendaBiz) {
-    this.editEntity(travelAgenda, travelAgenda.name);
-  }
-
-  delete(travelAgenda: ITravelAgendaBiz) {
-    this.deleteEntity(travelAgenda, travelAgenda.name);
-  }
 
   //#endregion
 }

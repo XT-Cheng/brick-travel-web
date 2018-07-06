@@ -87,23 +87,17 @@ export class ViewPointListComponent extends EntityListComponent<IViewPoint, IVie
     return 'ViewPoint';
   }
 
+  protected get entityName(): string {
+    return 'name';
+  }
+
   //#endregion
 
   //#region Public method
-  edit(viewPoint: IViewPointBiz) {
-    this.editEntity(viewPoint, viewPoint.name);
-  }
-
-  delete(viewPoint: IViewPointBiz) {
-    this.deleteEntity(viewPoint, viewPoint.name);
-  }
 
   //#endregion
 
   //#region Protected method
-  protected get entityCompParas(): any {
-    return {selectedCity: this._selectedCity};
-  }
 
   //#endregion
 }

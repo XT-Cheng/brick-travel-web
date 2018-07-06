@@ -44,16 +44,13 @@ export class CityListComponent extends EntityListComponent<ICity, ICityBiz> {
     return 'City';
   }
 
+  protected get entityName(): string {
+    return 'name';
+  }
+
   //#endregion
 
   //#region Public method
-  edit(city: ICityBiz) {
-    this.editEntity(city, city.name);
-  }
-
-  delete(city: ICityBiz) {
-    this.deleteEntity(city, city.name);
-  }
 
   //#endregion
 }

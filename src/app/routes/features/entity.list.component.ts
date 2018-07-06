@@ -96,6 +96,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     //#region Protected property
 
     protected abstract get entityDescription(): string;
+    protected abstract get entityName(): string;
     protected abstract get componentType(): any;
     protected abstract get newEntity(): U;
 
@@ -130,7 +131,7 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
             nzComponentParams: {
                 mode: EntityFormMode.create,
                 originalEntity: this.newEntity,
-                ...this.entityCompParas
+                ...this.createEntityParas
             },
             nzFooter: [{ ...this._oKBtnOption, ...{ onClick: this._createAction } }, this._cancelBtnOption]
         });
@@ -146,32 +147,28 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
     private _onReuseInit() {
         this._layoutCmp.entityListComp = this;
     }
-    //#endregion
 
-    //#region Protected methods
-    protected get entityCompParas(): any {
-        return {};
-    }
-
-    protected editEntity(entity: U, name: string) {
+    private editEntity(entity: U, name: string) {
         this._modelRef = this._modalService.create({
             nzTitle: `Edit ${this.entityDescription} ${name}`,
             nzContent: this.componentType,
             nzComponentParams: {
                 mode: EntityFormMode.edit,
                 originalEntity: entity,
+                ...this.editEntityParas
             },
             nzFooter: [{ ...this._oKBtnOption, ...{ onClick: this._changeAction } }, this._cancelBtnOption]
         });
     }
 
-    protected deleteEntity(entity: U, name: string) {
+    private deleteEntity(entity: U, name: string) {
         this._modelRef = this._modalService.create({
             nzTitle: `Delete ${this.entityDescription} ${name}`,
             nzContent: ModalComponent,
             nzComponentParams: {
                 modalHeader: `Confrim`,
-                modalContent: `Delete ${name}, are you sure?`
+                modalContent: `Delete ${name}, are you sure?`,
+                ...this.deleteEntityParas
             },
             nzFooter: [{ ...this._oKBtnOption, ...{ disabled: () => false, onClick: this._deleteAction(entity, name) } },
             {
@@ -181,5 +178,29 @@ export abstract class EntityListComponent<T extends IEntity, U extends IBiz> imp
             }]
         });
     }
+
+    //#endregion
+
+    //#region Protected methods
+    protected get createEntityParas(): any {
+        return {};
+    }
+
+    protected get editEntityParas(): any {
+        return {};
+    }
+
+    protected get deleteEntityParas(): any {
+        return {};
+    }
+
+    protected edit(entity: U) {
+        this.editEntity(entity, entity[this.entityName]);
+    }
+
+    protected delete(entity: U) {
+        this.deleteEntity(entity, entity[this.entityName]);
+    }
+
     //#endregion
 }
