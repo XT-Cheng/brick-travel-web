@@ -40,7 +40,7 @@ const routes: Routes = [
   // },
   // passport
   {
-    path: 'passport',
+    path: 'auth',
     component: LayoutPassportComponent,
     children: [
       { path: 'login', component: UserLoginComponent, data: { title: '登录', titleI18n: 'pro-login' } },

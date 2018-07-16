@@ -1,14 +1,15 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  CanActivateChild,
-  NavigationEnd,
-  Router,
-  RouterStateSnapshot,
+    ActivatedRouteSnapshot,
+    CanActivate,
+    CanActivateChild,
+    NavigationEnd,
+    Router,
+    RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from '@core/auth/providers/authService';
+import { AUTH_URL } from '@core/utils/constants';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
@@ -40,7 +41,7 @@ export class RoutingGuard implements CanActivate, CanActivateChild {
                 if (authToken.isValid()) {
                     return true;
                 } else {
-                    this._router.navigate(['/passport/login']);
+                    this._router.navigateByUrl(AUTH_URL);
                     return false;
                 }
             })

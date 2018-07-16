@@ -1,15 +1,16 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SettingsService } from '@delon/theme';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { TokenService } from '@core/auth/providers/tokenService';
+import { UserService } from '@core/store/providers/user.service';
+import { AUTH_URL } from '@core/utils/constants';
 
 @Component({
   selector: 'header-user',
   template: `
   <nz-dropdown nzPlacement="bottomRight">
     <div class="item d-flex align-items-center px-sm" nz-dropdown>
-      <nz-avatar [nzSrc]="settings.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
-      {{settings.user.name}}
+      <nz-avatar [nzSrc]="(userService.loggedIn$ | async).picture" nzSize="small" class="mr-sm"></nz-avatar>
+      {{(userService.loggedIn$ | async).name}}
     </div>
     <div nz-menu class="width-sm">
       <div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-user mr-sm"></i>个人中心</div>
@@ -22,27 +23,27 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
 })
 export class HeaderUserComponent implements OnInit {
   constructor(
-    public settings: SettingsService,
-    private router: Router,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-  ) {}
+    public userService: UserService,
+    private _tokenService: TokenService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-    this.tokenService.change().subscribe((res: any) => {
-      this.settings.setUser(res);
-    });
+    // this.userService.change().subscribe((res: any) => {
+    //   this.settings.setUser(res);
+    // });
     // mock
-    const token = this.tokenService.get() || {
-      token: 'nothing',
-      name: 'Admin',
-      avatar: './assets/logo-color.svg',
-      email: 'cipchk@qq.com',
-    };
-    this.tokenService.set(token);
+    // const token = this.tokenService.get() || {
+    //   token: 'nothing',
+    //   name: 'Admin',
+    //   avatar: './assets/logo-color.svg',
+    //   email: 'cipchk@qq.com',
+    // };
+    // this.tokenService.set(token);
   }
 
   logout() {
-    this.tokenService.clear();
-    this.router.navigateByUrl(this.tokenService.login_url);
+    this._tokenService.clear();
+    this.router.navigateByUrl(AUTH_URL);
   }
 }
